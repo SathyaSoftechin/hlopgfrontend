@@ -1,0 +1,242 @@
+/* ================= CONTAINER ================= */
+.owner-signup-container {
+  max-width: 450px;
+  margin: 50px auto;
+  padding: 30px;
+  background: #f9fdff;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.owner-signup-container h2 {
+  font-size: 24px;
+  margin-bottom: 25px;
+  color: #333;
+}
+
+/* ================= FORM ================= */
+.owner-signup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.owner-signup-form input,
+.owner-signup-form select {
+  padding: 12px 15px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #50dcf5;
+  transition: all 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Focus glow */
+.owner-signup-form input:focus,
+.owner-signup-form select:focus {
+  border-color: #4f46e5;
+  outline: none;
+  box-shadow: 0 0 6px rgba(79, 70, 229, 0.3);
+}
+
+/* Valid input */
+.valid-input {
+  border-color: #22c55e !important;
+  box-shadow: 0 0 5px rgba(34, 197, 94, 0.4);
+}
+
+/* Invalid input */
+.invalid-input {
+  border-color: #e63946 !important;
+  box-shadow: 0 0 5px rgba(230, 57, 70, 0.3);
+}
+
+/* Valid tick beside input */
+.input-with-status {
+  position: relative;
+}
+
+.valid-tick {
+  color: #22c55e;
+  font-weight: bold;
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+}
+
+/* Unified error block */
+.error-message {
+  color: #e63946;
+  margin-top: 10px;
+  font-weight: 500;
+  font-size: 14px;
+  text-align: left;
+}
+
+.validation-error {
+  color: #e63946;
+  font-size: 13px;
+  margin-top: -5px;
+  text-align: left;
+}
+
+/* ================= BUTTON ================= */
+.owner-signup-form button {
+  padding: 12px 0;
+  background-color: #4f46e5;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.owner-signup-form button:hover {
+  background-color: #3730a3;
+}
+
+/* ================= LOGIN LINK ================= */
+.owner-login-link {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #555;
+}
+
+.owner-login-link a {
+  color: #4f46e5;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.owner-login-link a:hover {
+  text-decoration: underline;
+}
+
+/* ================= OTP MODAL ================= */
+.otp-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.otp-modal-content {
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.otp-modal-content h3 {
+  margin-bottom: 15px;
+  color: #4f46e5;
+}
+
+.otp-modal-content p {
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: #333;
+}
+
+/* OTP Inputs */
+.otp-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.otp-inputs {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.otp-inputs input {
+  width: 60px;
+  height: 60px;
+  font-size: 24px;
+  text-align: center;
+  border-radius: 8px;
+  border: 1px solid #50dcf5;
+  transition: all 0.3s ease;
+}
+
+.otp-inputs input:focus {
+  border-color: #4f46e5;
+  outline: none;
+  box-shadow: 0 0 6px rgba(79, 70, 229, 0.3);
+}
+
+/* OTP Buttons */
+.otp-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.otp-actions button {
+  padding: 12px 0;
+  width: 48%;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: #fff;
+  background-color: #4f46e5;
+  transition: background 0.3s ease;
+}
+
+.otp-actions button:hover {
+  background-color: #3730a3;
+}
+
+.otp-cancel-btn {
+  background-color: #888;
+}
+
+.otp-cancel-btn:hover {
+  background-color: #555;
+}
+
+/* Resend Section */
+.resend-section {
+  margin-top: 10px;
+}
+
+.resend-section button {
+  background: transparent;
+  border: none;
+  color: #4f46e5;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.resend-section button:disabled {
+  color: #aaa;
+  cursor: not-allowed;
+}
+
+/* OTP error */
+.otp-error-message {
+  color: red;
+  margin-bottom: 10px;
+  font-weight: 500;
+}

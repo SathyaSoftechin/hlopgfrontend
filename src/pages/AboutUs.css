@@ -1,0 +1,409 @@
+/* ================= About Us Section ================= */
+.aboutus-container {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 60px auto;
+  max-width: 1150px;
+  gap: 0;
+}
+
+.aboutus-image img {
+  width: 550px;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 20px 0 0 20px;
+  display: block;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  transition: transform 0.4s ease;
+}
+
+.aboutus-content {
+  flex: 1;
+  background-image: radial-gradient(#d3d3d3 2px, transparent 2px);
+  background: linear-gradient(135deg, #f0e7ff, #e5d5ff);
+  border-radius: 0 25px 25px 0;
+  padding: 60px 45px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.aboutus-content h2 {
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: #111;
+}
+
+.aboutus-content h2 span {
+  background: linear-gradient(90deg, #6a11cb, #2575fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.aboutus-content p {
+  margin-top: 18px;
+  font-size: 17px;
+  color: #333;
+  line-height: 1.7;
+}
+
+/* Icons row */
+.aboutus-icons {
+  display: flex;
+  margin-top: 35px;
+  flex-wrap: wrap;
+}
+
+.aboutus-icon-item {
+  text-align: center;
+  flex: 1;
+  min-width: 120px;
+}
+
+.aboutus-icon-item p {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #444;
+}
+
+.aboutus-icons img {
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #fff;
+  padding: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.aboutus-icons img:hover {
+  transform: scale(1.15);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+}
+
+/* ===================== MISSION & VISION SECTION ===================== */
+.mission-vision-section {
+  text-align: center;
+  padding: 80px 20px;
+  background: #fafafa;
+}
+
+.mission-vision-heading {
+  font-size: 40px;
+  font-weight: 700;
+  margin-bottom: 40px;
+  color: #111;
+}
+
+.mission-vision-heading span {
+  background: linear-gradient(90deg, #6a11cb, #2575fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.mission-vision-cards {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.mv-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 35px 25px;
+  width: 350px;
+  max-width: 100%;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.mv-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+}
+
+.mv-img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  /* margin-bottom: 20px; */
+}
+
+.mv-text {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.mv-title {
+  font-size: 1.50rem;
+  font-weight: 700;
+  color: #222;
+}
+
+/* ===================== WHY US SECTION ===================== */
+.whyus-section {
+  padding: 80px 40px;
+  background-color: #fafafa;
+  background-image: radial-gradient(#d3d3d3 2px, transparent 2px);
+  background-size: 28px 28px;
+  text-align: center;
+}
+
+.whyus-heading {
+  font-size: 36px;
+  font-weight: 800;
+  margin-bottom: 15px;
+  color: #222;
+}
+
+.whyus-heading span {
+  background: linear-gradient(90deg, #6a0dad, #6a0dad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.whyus-subtitle {
+  max-width: 700px;
+  margin: 0 auto 50px auto;
+  font-size: 20px;
+  font-weight: 400;
+  color: #555;
+  line-height: 1.7;
+}
+
+.whyus-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 35px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.whyus-card {
+  background: #fff;
+  padding: 30px 22px;
+  border-radius: 14px;
+  text-align: left;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.whyus-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+}
+
+.whyus-icon {
+  color: #6a0dad;
+  font-size: 2.3rem;
+  margin-bottom: 18px;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.whyus-card:hover .whyus-icon {
+  transform: scale(1.15);
+  color: #2575fc;
+}
+
+.whyus-card h3 {
+  font-size: 21px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #222;
+}
+
+.whyus-card p {
+  font-size: 15px;
+  font-weight: 400;
+  color: #666;
+  line-height: 1.6;
+}
+
+/* ===================== FAQ SECTION ===================== */
+.faq-section {
+  padding: 80px 40px;
+  background-color: #fff;
+  background-size: 22px 22px;
+}
+
+.faq-heading {
+  text-align: center;
+  font-size: 34px;
+  font-weight: 700;
+  margin-bottom: 40px;
+  color: #222;
+}
+
+.faq-heading span {
+  background: linear-gradient(90deg, #6a11cb, #2575fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.faq-list {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.faq-item {
+  background: #f9f9f9;
+  border-radius: 12px;
+  padding: 20px 24px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.faq-item:hover {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Active FAQ styling */
+.faq-item.active {
+  background: #e1b6ff;
+  color: #000000;
+}
+
+.faq-item.active .faq-question h3 {
+  color: #000000;
+}
+
+.faq-question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.faq-question h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  color: #000000;
+  transition: color 0.3s ease;
+}
+
+/* Arrow rotation animation */
+.faq-question svg {
+  transition: transform 0.3s ease;
+}
+
+.faq-item.active .faq-question svg {
+  transform: rotate(180deg);
+}
+
+.faq-answer {
+  margin-top: 12px;
+  font-size: 15px;
+  font-weight: 400;
+  color: #000000;
+  line-height: 1.6;
+  display: none;
+  animation: fadeIn 0.4s ease;
+}
+
+.faq-item.active .faq-answer {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ================= Responsive ================= */
+@media (max-width: 1024px) {
+  .aboutus-image img {
+    width: 450px;
+  }
+
+  .whyus-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .mission-vision-cards {
+    gap: 30px;
+  }
+
+  .mv-card {
+    width: 300px;
+    padding: 25px 20px;
+  }
+
+  .mv-img {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+@media (max-width: 768px) {
+  .aboutus-container {
+    flex-direction: column;
+  }
+
+  .aboutus-image img {
+    width: 100%;
+    border-radius: 20px 20px 0 0;
+  }
+
+  .aboutus-content {
+    border-radius: 0 0 20px 20px;
+    text-align: center;
+  }
+
+  .aboutus-icons {
+    justify-content: center;
+  }
+
+  .whyus-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .mission-vision-cards {
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+  }
+
+  .mission-vision-heading {
+    font-size: 26px;
+  }
+
+  .mv-card {
+    width: 100%;
+    padding: 20px 15px;
+  }
+
+  .mv-img {
+    width: 90px;
+    height: 90px;
+  }
+
+  .mv-text {
+    font-size: 0.9rem;
+  }
+
+  .mv-title {
+    font-size: 1rem;
+  }
+
+  .faq-heading {
+    font-size: 26px;
+  }
+
+  .faq-question h3 {
+    font-size: 16px;
+  }
+}

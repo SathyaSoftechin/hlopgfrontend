@@ -1,0 +1,602 @@
+/* ================= Header Container ================= */
+.header {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 95%;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 30px;
+  background: transparent;
+  border: none;
+  z-index: 1000;
+  box-sizing: border-box;
+  border-radius: 0;
+  transition: all 0.4s ease-in-out;
+  margin-bottom: 20px;
+}
+
+/* ================= Home Page Animation ================= */
+.header.home-animation {
+  background: transparent;
+  border-radius: 0;
+  transform: translateX(-50%) translateY(-50px);
+  opacity: 0;
+  transition: all 0.6s ease-out;
+  animation: slideDownFade 0.8s forwards;
+}
+
+@keyframes slideDownFade {
+  0% {
+    transform: translateX(-50%) translateY(-50px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ================= Capsule Look (All Other Pages + Home Scroll) ================= */
+.header.scrolled {
+  background: #ffffff;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 50px;
+  width: 85%;
+  height: 60px;
+  padding: 0 25px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  transition: all 0.4s ease, box-shadow 0.3s ease;
+}
+
+/* ================= Brand ================= */
+/* keep brand unchanged, but make layout stable by assigning order + flex basis */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  /* Layout helpers for consistent positioning */
+  order: 0;
+  flex: 0 0 auto;
+}
+
+.logo {
+  width: 65px;
+  height: auto;
+  border-radius: 50%;
+  object-fit: cover;
+  transition: width 0.3s ease, transform 0.3s ease;
+  display: flex;
+  align-items: center !important;
+}
+
+.logo:hover {
+  transform: scale(1.05);
+}
+
+.header.scrolled .logo {
+  width: 50px;
+}
+
+/* ================= Center / Nav wrapper helper =================
+   We add a center area that holds the search / nav so logo and hamburger
+   remain stable on left & right respectively. These rules are non-invasive
+   — they only affect layout behavior, not the visual styles you already had.
+*/
+.header .center {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  order: 1;
+  flex: 1 1 auto;           /* allow center to grow, keeping brand & actions fixed */
+  justify-content: center;  /* default: center the content (nav/search) */
+  min-width: 0;             /* prevents overflow with long content */
+}
+
+/* If your HTML doesn't have a .center wrapper, these rules still help because
+   the existing .nav / .search-container will behave similarly due to flex rules below. */
+
+/* ================= Search Bar ================= */
+.search-container {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 8px 16px; /* 🔹 Updated */
+  border-radius: 30px;
+  gap: 10px;
+  position: relative;
+  transition: all 0.3s ease;
+  border: none;
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  max-width: 600px; /* 🔹 Updated: allows wider layout */
+}
+
+.search-container:focus-within {
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 0 10px rgba(117, 86, 255, 0.4);
+  transform: scale(1.02);
+}
+
+.header.scrolled .search-container {
+  background: rgba(0, 0, 0, 0.05);
+  padding: 6px 14px; /* 🔹 Updated */
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  position: relative;
+}
+
+.search-icon {
+  color: #7556ff;
+  margin-right: 8px; /* 🔹 slightly spaced */
+  font-size: 16px; /* 🔹 slightly larger */
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.search-icon:hover {
+  transform: scale(1.2);
+  color: #5d43cc;
+}
+
+.header.scrolled .search-icon {
+  color: #7556ff;
+}
+
+.search-input {
+  border: none;
+  border-radius: 20px;
+  outline: none;
+  background: transparent;
+  color: #333;
+  width: 200px; /* 🔹 Increased width */
+  padding: 8px 12px; /* 🔹 Updated padding */
+  transition: width 0.4s ease, color 0.3s ease, background 0.3s ease;
+  caret-color: #7556ff;
+}
+
+.search-input::placeholder {
+  color: #ffffff;
+}
+
+.search-input:focus {
+  color: #f0f0f0;
+  width: 300px; /* 🔹 Wider when focused */
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.header.scrolled .search-input {
+  color: #000;
+}
+
+.header.scrolled .search-input::placeholder {
+  color: #555;
+}
+
+.search-input::selection {
+  background: #7556ff;
+  color: #fff;
+}
+
+/* ================= Suggestions Dropdown ================= */
+.suggestions-dropdown {
+  position: absolute;
+  top: 48px; /* 🔹 Adjusted for taller bar */
+  left: 0;
+  width: 100%;
+  max-height: 160px;
+  overflow-y: auto;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  z-index: 2000;
+  list-style: none;
+  padding: 0;
+  margin: 6px 0 0 0;
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+  transition: all 0.25s ease;
+}
+
+.suggestions-dropdown.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.suggestions-dropdown li {
+  padding: 10px 14px;
+  cursor: pointer;
+  color: #000000;
+  font-size: 15px;
+  transition: background 0.2s ease, padding-left 0.2s ease;
+}
+
+.suggestions-dropdown li:hover {
+  background: #7556ff;
+  color: #fff;
+  padding-left: 20px;
+}
+
+/* ================= Custom Dropdown (Category) ================= */
+.custom-dropdown {
+  position: relative;
+  min-width: 130px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 25px;
+  padding: 6px 14px;
+  cursor: pointer;
+  z-index: 999;
+  transition: all 0.3s ease, transform 0.2s ease;
+}
+
+.header.scrolled .custom-dropdown {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.dropdown-display {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #333;
+  font-weight: 500;
+  font-size: 14px;
+  transition: color 0.3s ease;
+}
+
+.header.scrolled .dropdown-display {
+  color: #000;
+}
+
+.dropdown-arrow {
+  font-size: 12px;
+  margin-left: 6px;
+  transition: transform 0.3s ease;
+  color: #333;
+}
+
+.dropdown-arrow.open {
+  transform: rotate(180deg);
+}
+
+/* ================= Dropdown Menu ================= */
+.dropdown-menu {
+  position: absolute;
+  top: 42px;
+  left: 0;
+  width: 100%;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+  list-style: none;
+  padding: 6px 0;
+  margin: 0;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: 1500;
+}
+
+.dropdown-menu.active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.dropdown-menu li {
+  padding: 8px 14px;
+  font-size: 14px;
+  color: #000000;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.dropdown-menu li:hover {
+  background: #7556ff;
+  color: #fff;
+  padding-left: 20px;
+}
+
+.dropdown-menu li.active {
+  background: #7556ff;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* ================= Search Button ================= */
+.search-btn {
+  background: #ffffff;
+  border: none;
+  outline: none;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-weight: 600;
+  color: #7556ff;
+  cursor: pointer;
+  transition: all 0.3s ease, transform 0.2s ease;
+}
+
+.search-btn:hover {
+  background: #f0f0f0;
+  color: #5d43cc;
+  transform: scale(1.05);
+}
+
+.header.scrolled .search-btn {
+  background: #7556ff;
+  color: #fff;
+}
+
+.header.scrolled .search-btn:hover {
+  background: #5d43cc;
+}
+
+/* ================= Nav Links ================= */
+/* Keep original nav link styles intact; add layout helpers so nav is centered in header */
+.nav {
+  /* layout helpers */
+  order: 2;
+  flex: 0 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* center nav in the center area by default */
+}
+
+.nav ul {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  margin: 0;
+  padding: 0;
+  font-size: 25px;
+}
+
+.nav ul li a,
+.nav ul li button {
+  text-decoration: none;
+  color: #ffffff;
+  font-size: 17px;
+  font-weight: 600;
+  transition: color 0.3s ease, border-bottom 0.3s ease, transform 0.2s ease;
+  white-space: nowrap;
+  padding-bottom: 3px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.nav ul li a:hover,
+.nav ul li a.active,
+.nav ul li button:hover {
+  border-bottom: 2px solid #5d43cc;
+  transform: scale(1.05);
+}
+
+.header.scrolled .nav ul li a,
+.header.scrolled .nav ul li button {
+  color: #000;
+}
+
+.header.scrolled .nav ul li a:hover,
+.header.scrolled .nav ul li a.active,
+.header.scrolled .nav ul li button:hover {
+  border-bottom: 2px solid #000;
+}
+
+/* Highlight signup button */
+.nav ul li button.signup {
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: #ffffff;
+  color: #7556ff;
+  transition: all 0.3s ease, transform 0.2s ease;
+}
+
+.nav ul li button.signup:hover {
+  background: #f0f0f0;
+  color: #5d43cc;
+  transform: scale(1.05);
+}
+
+.header.scrolled .nav ul li button.signup {
+  background: #7556ff;
+  color: #fff;
+}
+
+.header.scrolled .nav ul li button.signup:hover {
+  background: #5d43cc;
+  color: #fff;
+}
+
+/* ================= Hamburger (Mobile) ================= */
+/* place hamburger as the right-most fixed item so it never drifts */
+.hamburger {
+  display: none;
+  font-size: 26px;
+  color: #ffffff;
+  cursor: pointer;
+  z-index: 1100;
+  transition: color 0.3s ease, transform 0.3s ease;
+  order: 3;          /* ensure hamburger is last in visual order */
+  flex: 0 0 auto;    /* keep hamburger size fixed */
+}
+
+.hamburger:hover {
+  transform: rotate(90deg);
+}
+
+.header.scrolled .hamburger {
+  color: #000;
+}
+
+/* ================= Responsive ================= */
+
+@media (max-width: 900px) {
+  .logo {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 992px) {
+  .desktop-search {
+    display: none;
+  }
+  .nav.open .mobile-search {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px;
+    width: 90%;
+  }
+  .nav.open .mobile-search .search-input {
+    width: 100%;
+    max-width: 250px;
+  }
+
+  /* adjust header padding/width for tablet to avoid drifting */
+  .header {
+    width: 94%;
+    padding: 0 20px;
+  }
+  .header.scrolled {
+    width: 92%;
+  }
+
+  /* center navigation and keep brand & hamburger stable */
+  .header .center,
+  .nav {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .hamburger {
+    display: block;
+  }
+
+  .nav {
+    color: #000;
+    position: fixed;
+    top: 70px;
+    right: -100%;
+    width: 85%;
+    max-width: 320px;
+    height: 100vh;
+    background: #ffffff;
+    transition: right 0.4s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 40px 20px;
+    gap: 25px;
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
+    z-index: 1200;
+  }
+
+  .nav.open {
+    right: 0;
+  }
+
+  .nav ul {
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    padding-left: 0;
+  }
+
+  .nav ul li {
+    width: 100%;
+    text-align: left;
+  }
+
+  .nav ul li a,
+  .nav ul li button {
+    color: #000;
+    width: 100%;
+    padding: 10px 15px;
+  }
+
+  .mobile-search {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+  }
+
+  .mobile-search .search-container {
+    width: 100%;
+    padding: 8px 12px;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 30px;
+    position: relative;
+  }
+
+  .mobile-search .search-input {
+    width: 100%;
+  }
+
+  .mobile-search .suggestions-dropdown {
+    width: 100%;
+  }
+
+  /* ensure brand stays left and hamburger right on small screens */
+  .brand { order: 0; }
+  .header .center { order: 1; justify-content: flex-start; }
+  .hamburger { order: 3; }
+}
+
+/* ================= Profile Dropdown ================= */
+.profile-dropdown {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.profile-menu {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+  list-style: none;
+  padding: 8px 0;
+  min-width: 140px;
+  z-index: 1500;
+}
+
+.profile-menu li {
+  padding: 10px 14px;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.profile-menu li:hover {
+  background: #7556ff;
+  color: #fff;
+  font-weight: 500;
+}
+
+.footer.fixed-bottom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}

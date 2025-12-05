@@ -1,0 +1,116 @@
+/* ===== BACKDROP BLUR OVERLAY ===== */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+/* ===== POPUP CARD ===== */
+.popup-card {
+  width: 95%;
+  max-width: 520px;
+  background: #ffffffea;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+  animation: popupFade 0.25s ease-in-out;
+}
+
+@keyframes popupFade {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ===== TITLE ===== */
+.popup-title {
+  text-align: center;
+  font-weight: 700;
+  font-size: 24px;
+  margin-bottom: 25px;
+  color: #333;
+}
+
+/* ===== INPUT GROUP ===== */
+.popup-input-row {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.popup-input-row input {
+  flex: 1;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  font-size: 15px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.popup-input-row input:focus {
+  border-color: #7556ff;
+  box-shadow: 0 0 8px rgba(117, 86, 255, 0.25);
+}
+
+/* ===== BUTTONS ===== */
+.generate-btn {
+  width: 100%;
+  padding: 14px;
+  background: #7556ff;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.3s;
+  margin-top: 10px;
+}
+
+.generate-btn:hover {
+  background: #5a3de0;
+}
+
+.cancel-btn {
+  width: 100%;
+  padding: 12px;
+  background: #f4f4f4;
+  color: #444;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.cancel-btn:hover {
+  background: #eaeaea;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 480px) {
+  .popup-input-row {
+    flex-direction: column;
+  }
+
+  .popup-card {
+    padding: 22px;
+  }
+
+  .popup-title {
+    font-size: 20px;
+  }
+}

@@ -1,0 +1,143 @@
+.pgmembers-container {
+  background-color: #f8f9fb;
+  min-height: 100vh;
+  padding: 25px 35px;
+  font-family: "Poppins", sans-serif;
+}
+
+/* ===== Header ===== */
+.pgmembers-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.pgmembers-legend {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-size: 14px;
+  color: #333;
+}
+
+.legend {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+
+.legend.stay {
+  background-color: #a7f3d0;
+}
+
+.legend.leaving {
+  background-color: #fef3c7;
+}
+
+.legend.left {
+  background-color: #fecaca;
+}
+
+/* ===== Filter ===== */
+.pgmembers-filter {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  gap: 6px;
+}
+
+.filter-icon {
+  color: #6c63ff;
+  font-size: 16px;
+}
+
+.filter-select {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+  color: #555;
+  cursor: pointer;
+}
+
+/* ===== Table ===== */
+.pgmembers-table {
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+th {
+  background: #f5f4ff;
+  color: #444;
+  font-weight: 600;
+  padding: 12px;
+  text-align: left;
+  border-bottom: 2px solid #eee;
+}
+
+td {
+  padding: 12px;
+  border-bottom: 1px solid #f0f0f0;
+  color: #333;
+}
+
+/* ===== Row Colors ===== */
+.row-stay {
+  background-color: #f0fdf4;
+}
+
+.row-leaving {
+  background-color: #fffbeb;
+}
+
+.row-left {
+  background-color: #fef2f2;
+}
+
+/* ===== Total Box ===== */
+.pgmembers-total {
+  margin-top: 15px;
+  text-align: right;
+  font-weight: 600;
+  color: #fff;
+  background: #6c63ff;
+  display: inline-block;
+  padding: 6px 15px;
+  border-radius: 6px;
+  font-size: 14px;
+  /* float: right; */
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .pgmembers-header {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .pgmembers-filter {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  table th,
+  table td {
+    font-size: 13px;
+    padding: 10px;
+  }
+}

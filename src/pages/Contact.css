@@ -1,0 +1,198 @@
+/* File: src/pages/Contact.css */
+
+.contact-page {
+  font-family: "Inter", sans-serif;
+  background: #fff;
+  color: #111;
+  padding: 130px 8%;
+}
+
+/* ---------- HEADER ---------- */
+.contact-header {
+  text-align: left;
+  margin-bottom: 40px;
+}
+
+.subtitle {
+  color: #555;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+/* ---------- SOCIAL ICONS ---------- */
+.social-icons {
+  justify-content: left;
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.social-icons a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+  color: #111;
+  font-size: 18px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Facebook Hover */
+.social-icons .facebook:hover {
+  background-color: #1877f2;
+  color: #fff;
+  border-color: #1877f2;
+}
+
+/* Instagram Hover (Gradient) */
+.social-icons .instagram:hover {
+  background: linear-gradient(45deg, #f58529, #dd2a7b, #8134af, #515bd4);
+  color: #fff;
+  border: none;
+}
+
+/* Twitter (X) Hover */
+.social-icons .twitter:hover {
+  background-color: #000;
+  color: #fff;
+  border-color: #000;
+}
+
+/* LinkedIn Hover */
+.social-icons .linkedin:hover {
+  background-color: #0077b5;
+  color: #fff;
+  border-color: #0077b5;
+}
+
+/* ---------- FORM ---------- */
+.contact-form {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 6px;
+  padding: 25px;
+  margin-bottom: 30px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+  margin-bottom: 20px;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #ddd;
+  padding: 10px 5px;
+  outline: none;
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  border-bottom: 1px solid #7b61ff;
+}
+
+.btn-submit {
+  background-color: #7b61ff;
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.btn-submit:hover {
+  background-color: #6a52e2;
+}
+
+/* ---------- CONTACT INFO ---------- */
+.contact-info {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 6px;
+  padding: 25px;
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  flex-wrap: wrap;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.info-left h4 {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.info-left h2 {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.4;
+  color: #111;
+}
+
+.info-right {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 50px;
+}
+
+.info-item h4 {
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.divider {
+  width: 20px;
+  height: 2px;
+  background: #000;
+  margin-bottom: 5px;
+}
+
+.info-item p {
+  font-weight: 500;
+  margin-bottom: 3px;
+}
+
+.info-item small {
+  color: #555;
+  font-size: 13px;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 768px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-info {
+    flex-direction: column;
+  }
+
+  .info-right {
+    flex-direction: column;
+    gap: 25px;
+  }
+
+  .social-icons {
+    justify-content: flex-start;
+  }
+}

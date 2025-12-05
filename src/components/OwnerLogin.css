@@ -1,0 +1,97 @@
+/* =========================
+   Owner Login Page Styles
+========================= */
+
+.owner-login-container {
+  margin-top: 120px !important;
+  max-width: 400px;
+  margin: 60px auto;
+  padding: 30px;
+  background: #d3f1fc;
+  border-radius: 12px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  font-family: "Inter", sans-serif;
+}
+
+.owner-login-container h2 {
+  margin-bottom: 20px;
+  font-size: 22px;
+  color: #333;
+  font-weight: 600;
+}
+
+.owner-login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.owner-login-form input {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  font-size: 15px;
+  transition: border 0.2s ease-in-out;
+}
+
+.owner-login-form input:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 4px rgba(22, 85, 163, 0.4);
+}
+
+/* Forgot Password link */
+.forgot-password {
+  font-size: 13px;
+  color: #0877ff;
+  text-align: right;
+  cursor: pointer;
+  margin-top: -8px;
+  margin-bottom: 5px;
+  transition: color 0.2s;
+}
+
+.forgot-password:hover {
+  color: #4f46e5;
+  text-decoration: underline;
+}
+
+.owner-login-form button {
+  padding: 12px;
+  background: #4f46e5;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.owner-login-form button:hover {
+  background: #4f46e5;
+}
+
+.owner-signup-link {
+  margin-top: 15px;
+  font-size: 14px;
+  color: #555;
+}
+
+.owner-signup-link a {
+  color: #4f46e5;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.owner-signup-link a:hover {
+  text-decoration: underline;
+}
+
+
+.error-message {
+  color: red;
+  margin-bottom: 10px;
+  font-weight: 500;
+}

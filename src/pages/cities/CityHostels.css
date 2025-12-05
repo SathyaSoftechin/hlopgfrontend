@@ -1,0 +1,220 @@
+.city-page {
+  font-family: "Inter", sans-serif;
+  color: #000;
+  background: #fafafa;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ================= Hero Section ================= */
+.city-hero {
+  position: relative;
+  height: 50vh;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.city-overlay {
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  text-align: center;
+  padding: 40px 20px;
+  border-radius: 20px;
+}
+
+.city-overlay h1 {
+  font-size: 2.8rem;
+  margin-bottom: 10px;
+}
+
+.city-overlay p {
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+/* ================= Area + Gender Filter ================= */
+.area-gender-filter {
+  width: 100%;
+  padding: 0 8%;
+  margin: 30px 0 10px 0;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.area-gender-filter label {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #222;
+  margin-right: 5px;
+}
+
+/* -------- Modern Styled Dropdown -------- */
+.area-gender-filter select {
+  padding: 10px 40px 10px 15px;
+  border-radius: 12px;
+  border: 1.8px solid #d0d0d0;
+  font-size: 0.95rem;
+  font-weight: 500;
+  background: #fff;
+  color: #333;
+  appearance: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 160px;
+  position: relative;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14'><polygon points='0,0 14,0 7,7' style='fill:%23666'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 12px;
+}
+
+.area-gender-filter select:hover {
+  border-color: #007bff;
+  box-shadow: 0 3px 10px rgba(0, 123, 255, 0.1);
+}
+
+.area-gender-filter select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 6px rgba(0, 123, 255, 0.3);
+}
+
+/* -------- Option Styling (Browser-Safe Trick) -------- */
+.area-gender-filter select option {
+  background-color: #fff;
+  color: #333;
+  font-weight: 500;
+  padding: 10px;
+}
+
+/* Works in most modern browsers */
+.area-gender-filter select option:hover,
+.area-gender-filter select option:checked {
+  background-color: #f0f7ff;
+  color: #007bff;
+}
+
+/* ================= PG Grid ================= */
+.pg-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 25px;
+  padding: 60px 8%;
+}
+
+.pg-card {
+  background: #fff;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  opacity: 1;
+}
+
+.pg-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.12);
+}
+
+/* ================= PG Image ================= */
+.pg-image {
+  position: relative;
+  height: 180px;
+}
+
+.pg-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.verified-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  color: #4caf50;
+  font-size: 1.3rem;
+}
+
+.wishlist {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  color: #e63946;
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+/* ================= PG Info ================= */
+.pg-info {
+  padding: 15px 20px;
+  text-align: left;
+}
+
+.pg-info h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.pg-info p {
+  margin: 4px 0;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 600;
+  color: #ffb703;
+  margin: 6px 0;
+}
+
+.icons {
+  display: flex;
+  gap: 8px;
+  color: #666;
+  margin: 6px 0;
+  font-size: 0.95rem;
+}
+
+.price {
+  font-weight: 600;
+  color: #222;
+  margin-top: 10px;
+}
+
+.price span {
+  color: #777;
+  font-size: 0.85rem;
+}
+
+/* ================= Responsive ================= */
+@media (max-width: 768px) {
+  .city-overlay h1 {
+    font-size: 2rem;
+  }
+  .city-overlay p {
+    font-size: 1rem;
+  }
+  .pg-grid {
+    padding: 40px 5%;
+  }
+  .area-gender-filter {
+    padding: 0 5%;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .area-gender-filter select {
+    width: 100%;
+  }
+}

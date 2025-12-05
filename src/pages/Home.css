@@ -1,0 +1,329 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=DM+Serif+Text&display=swap');
+
+/* ================= Base ================= */
+.home {
+  font-family: 'Poppins', sans-serif;
+  color: #000;
+  background: #fafafa;
+  overflow-x: hidden;
+}
+
+/* ================= Hero Section ================= */
+.hero {
+  background-size: cover;
+  background-position: center;
+  height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: background-image 1s ease-in-out;
+  margin-bottom: 35px;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+.overlay {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+
+/* ================= Hero Text ================= */
+.hero .overlay .title {
+  font-family: 'DM Serif Text', serif !important;
+  font-size: 68px !important;
+  font-weight: 50 !important;
+  color: #ffffff !important;
+  margin-bottom: 10px;
+}
+
+.hero .overlay .subtitle {
+  font-family: 'DM Serif Text', serif !important;
+  font-size: 24px !important;
+  font-weight: 100 !important;
+  color: #ffffff !important;
+}
+
+/* ================= City Section ================= */
+.city-section {
+  padding: 60px 5% 60px;
+  position: relative;
+  margin-top: -50px;
+}
+
+.city-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+.city-header h2 {
+  font-size: 26px;
+  font-weight: 600;
+  color: #7556ff;
+}
+
+.know-more-btn {
+  background: #7556ff;
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.know-more-btn:hover {
+  transform: scale(1.05);
+}
+
+/* ================= Scroll Section ================= */
+.pg-container {
+  position: relative;
+}
+
+.pg-scroll {
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+
+.pg-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.pg-track {
+  display: flex;
+  gap: 25px;
+}
+
+/* ================= PG CARD (Updated to Option B) ================= */
+
+.pg-card {
+  background: #fff;
+  border-radius: 20px; 
+  overflow: hidden;
+  min-width: 300px !important;
+  max-width: 300px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  transition: 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+}
+
+.pg-card:hover {
+  transform: translateY(-6px);
+}
+
+/* ================= Image ================= */
+.pg-image {
+  width: 100%;
+  height: 220px !important;
+  position: relative;
+}
+
+.pg-image img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+.wishlist {
+  position: absolute;
+  top: 12px;
+  right: 15px;
+  color: #fff;
+  font-size: 22px;
+  transition: 0.3s;
+}
+
+.wishlist:hover {
+  color: #ff4d4d;
+}
+
+/* ================= Card Info ================= */
+.pg-details {
+  padding: 12px 16px !important;
+  gap: 4px !important;   
+  display: flex;
+  flex-direction: column;
+}
+
+/* Name + Rating row */
+.pg-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pg-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #000;
+}
+
+.pg-rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.pg-rating .star {
+  color: #f5b50a;
+  font-size: 16px;
+}
+
+.pg-location {
+  margin-left: -10px !important;
+  margin-top: -14px !important;
+  font-size: 20px;
+  color: #777;
+
+}
+
+.pg-icons-line {
+  margin: 4px 0 !important;
+  gap: 10px !important;
+}
+
+
+/* ================= Facilities (NEW Style) ================= */
+.facility-row {
+  margin-top: -3px !important;
+  display: flex;
+  justify-content: space-between;
+  margin: 14px 0;
+}
+
+.facility-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-size: 13px;
+  color: #444;
+}
+
+.facility-block svg {
+  font-size: 18px;
+  color: #363636;
+}
+
+/* ================= Price Row ================= */
+
+.pg-price {
+  margin-top: 4px !important;
+  line-height: 1.1 !important;
+}
+
+
+.price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.price-row .price {
+  font-size: 22px;
+  font-weight: 700;
+  color: #000;
+}
+
+.price-row .per {
+  font-size: 13px;
+  color: #666;
+}
+
+/* ================= Know More ================= */
+.know-more {
+  margin-top: 12px;
+  padding: 0;
+  background: none;
+  border: none;
+  color: #7556ff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.know-more:hover {
+  text-decoration: underline;
+}
+
+/* ================= Arrows ================= */
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #fff;
+  color: #7556ff;
+  border: none;
+  font-size: 22px;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  z-index: 2;
+}
+
+.arrow:hover {
+  background: #7556ff;
+  color: #fff;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.arrow.left { left: -15px; }
+.arrow.right { right: -15px; }
+.arrow.hide { opacity: 0; pointer-events: none; }
+.arrow.show { opacity: 1; }
+
+/* ================= Responsive ================= */
+@media (max-width: 768px) {
+  .pg-card { min-width: 240px; }
+
+  .hero .title { font-size: 48px !important; }
+  .hero .subtitle { font-size: 20px !important; }
+
+  .pg-header { flex-direction: column; align-items: flex-start; }
+  .pg-rating { margin-top: 3px; }
+}
+
+
+.lsicon--location-outline {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  --svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cg fill='none' stroke='%23000' stroke-width='1'%3E%3Cpath d='M8 14.5C10.5 11 12.5 8 12.5 6a4.5 4.5 0 1 0-9 0c0 2 2 5 4.5 8.5Z'/%3E%3Cpath d='M10 6a2 2 0 1 1-4 0a2 2 0 0 1 4 0Z'/%3E%3C/g%3E%3C/svg%3E");
+  background-color: currentColor;
+  -webkit-mask-image: var(--svg);
+  mask-image: var(--svg);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+}
+
+.start {
+  margin-top: -3px !important;
+  padding-right: 180px;
+  font-size: 14px;
+  color: #555;
+  margin-bottom: -35px !important;
+}
+

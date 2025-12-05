@@ -1,0 +1,110 @@
+/* src/pages/Reviews.css */
+
+.reviews-container {
+  background: #fff;
+  padding: 30px;
+  border-radius: 14px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  margin-top: 20px;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.reviews-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 24px;
+  border-left: 4px solid #7b61ff;
+  padding-left: 12px;
+}
+
+/* Grid Layout */
+.reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+/* Individual Review Card */
+.review-card {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.review-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Header Section */
+.review-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 12px;
+}
+
+.reviewer-info h4 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 2px;
+  color: #111;
+}
+
+.reviewer-info p {
+  font-size: 13px;
+  color: #777;
+  margin: 0;
+}
+
+/* Review Text */
+.review-text {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+
+/* Star Ratings */
+.stars {
+  display: flex;
+  gap: 4px;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .reviews-container {
+    padding: 20px;
+  }
+
+  .review-card {
+    padding: 16px;
+  }
+
+  .reviews-title {
+    font-size: 20px;
+  }
+}
