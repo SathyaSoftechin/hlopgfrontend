@@ -42,7 +42,7 @@ const AdminPanel = () => {
   const navigate = useNavigate(); // ✅ Correct position
 const [user, setUser] = useState(null);
 
-const hideHeaderFooter = window.hideHeaderFooter || false;
+// const hideHeaderFooter = window.hideHeaderFooter || false;
 
   // ---------------- LOGOUT ----------------
   const handleLogout = () => {
