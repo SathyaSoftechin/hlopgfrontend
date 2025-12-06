@@ -38,7 +38,7 @@ const MyPGs = ({ user }) => {
         navigate(`/edit-rooms/${hostel_id}`);
         break;
       case "viewMembers":
-        navigate(`/pg-members/${hostel_id}`);
+        // navigate(`/pg-members/${hostel_id}`);
         break;
       default:
         break;
@@ -61,14 +61,14 @@ const MyPGs = ({ user }) => {
               <h4>{pg.hostel_name}</h4>
               <div className="pg-actions">
                 <button onClick={() => handleAction(pg.hostel_id, "editPG")}>
-                  Edit PG Details
-                </button>
-                <button onClick={() => handleAction(pg.hostel_id, "editRooms")}>
                   Edit Room Details
                 </button>
-                <button onClick={() => handleAction(pg.hostel_id, "viewMembers")}>
-                  View PG Members
+                <button onClick={() => handleAction(pg.hostel_id, "editRooms")}>
+                  Edit PG Details
                 </button>
+                {/* <button onClick={() => handleAction(pg.hostel_id, "viewMembers")}>
+                  View PG Members
+                </button> */}
               </div>
             </div>
           ))}

@@ -16,9 +16,9 @@ import Dashboard from "./Dashboard";
 import UploadPG from "./UploadPG";
  import MyPGs from "./MyPGs";
 import PGMembersList from "./PGMembersList";
-// import PaymentsList from "./PaymentsList";
-// import Reviews from "./Reviews";
-// import MyRooms from "./MyRooms";
+import PaymentsList from "./PaymentsList";
+import Reviews from "./Reviews";
+import MyRooms from "./MyRooms";
 
 import "./AdminPanel.css";
 import { useNavigate } from "react-router-dom";
@@ -42,6 +42,7 @@ const AdminPanel = () => {
   const navigate = useNavigate(); // ✅ Correct position
 const [user, setUser] = useState(null);
 
+const hideHeaderFooter = window.hideHeaderFooter || false;
 
   // ---------------- LOGOUT ----------------
   const handleLogout = () => {

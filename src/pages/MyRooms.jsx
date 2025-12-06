@@ -1,10 +1,19 @@
 // src/pages/MyRooms.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./MyRooms.css";
 
-const MyRooms = () => {
-  const [floors, setFloors] = useState([]); // initially empty
-  const [setupPopup, setSetupPopup] = useState(true);
+const STORAGE_KEY = "hlopg_myrooms_layout";
+
+export default function MyRooms() {
+  // REMOVE HEADER + FOOTER FOR THIS PAGE
+  useEffect(() => {
+    window.hideHeaderFooter = true;
+    return () => (window.hideHeaderFooter = false);
+  }, []);
+
+  const [floors, setFloors] = useState([]);
+  const [setupPopup, setSetupPopup] = useState(false);
+
   const [setupData, setSetupData] = useState({
     floors: "",
     roomsPerFloor: "",
@@ -12,33 +21,46 @@ const MyRooms = () => {
   });
 
   const [showPopup, setShowPopup] = useState(false);
-  const [popupMode, setPopupMode] = useState("add");
-  const [popupData, setPopupData] = useState({ roomNo: "", sharing: "" });
-  const [activeFloorIndex, setActiveFloorIndex] = useState(null);
-  const [activeRoomIndex, setActiveRoomIndex] = useState(null);
   const [popupVisible, setPopupVisible] = useState(false);
 
-  // ✅ Generate Room Layout from Setup
+  const [popupMode, setPopupMode] = useState("add");
+  const [popupData, setPopupData] = useState({ roomNo: "", sharing: "" });
+
+  const [activeFloorIndex, setActiveFloorIndex] = useState(null);
+  const [activeRoomIndex, setActiveRoomIndex] = useState(null);
+
+  // 📌 Load saved layout from localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+
+    if (saved) {
+      setFloors(JSON.parse(saved));
+      setSetupPopup(false);
+    } else {
+      setSetupPopup(true); // first-time setup
+    }
+  }, []);
+
+  // 📌 Save layout on every change
+  useEffect(() => {
+    if (floors.length > 0) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(floors));
+    }
+  }, [floors]);
+
+  // ➕ Generate layout
   const generateLayout = () => {
     const { floors, roomsPerFloor, sharing } = setupData;
 
     if (!floors || !roomsPerFloor || !sharing)
-      return alert("Please fill all details to generate layout.");
+      return alert("Please fill all fields");
 
-    const numFloors = parseInt(floors);
-    const numRooms = parseInt(roomsPerFloor);
-    const numSharing = parseInt(sharing);
+    const numFloors = Number(floors);
+    const numRooms = Number(roomsPerFloor);
+    const numSharing = Number(sharing);
 
     const newFloors = Array.from({ length: numFloors }, (_, floorIndex) => ({
-      floor: `${floorIndex + 1}${
-        floorIndex === 0
-          ? "st"
-          : floorIndex === 1
-          ? "nd"
-          : floorIndex === 2
-          ? "rd"
-          : "th"
-      } Floor`,
+      floor: `${floorIndex + 1}${["st", "nd", "rd"][floorIndex] || "th"} Floor`,
       rooms: Array.from({ length: numRooms }, (_, roomIndex) => ({
         roomNo: `${floorIndex + 1}${String(roomIndex + 1).padStart(2, "0")}`,
         beds: Array(numSharing).fill(false),
@@ -49,33 +71,34 @@ const MyRooms = () => {
     setSetupPopup(false);
   };
 
-  // ✅ Toggle Bed Occupancy
+  // Toggle bed status
   const toggleBed = (floorIndex, roomIndex, bedIndex) => {
-    const updatedFloors = [...floors];
-    updatedFloors[floorIndex].rooms[roomIndex].beds[bedIndex] =
-      !updatedFloors[floorIndex].rooms[roomIndex].beds[bedIndex];
-    setFloors(updatedFloors);
+    const updated = [...floors];
+    updated[floorIndex].rooms[roomIndex].beds[bedIndex] =
+      !updated[floorIndex].rooms[roomIndex].beds[bedIndex];
+
+    setFloors(updated);
   };
 
-  // ✅ Add Floor
+  // ➕ Add Floor
   const addFloor = () => {
     const newFloorNum = floors.length + 1;
-    setFloors([
-      ...floors,
-      {
-        floor: `${newFloorNum}th Floor`,
-        rooms: [],
-      },
-    ]);
+
+    const newFloor = {
+      floor: `${newFloorNum}${["st", "nd", "rd"][newFloorNum - 1] || "th"} Floor`,
+      rooms: [],
+    };
+
+    setFloors([...floors, newFloor]);
   };
 
-  // ✅ Open Popup for Add/Edit
+  // ➕ Add/Edit Popup Logic
   const openPopup = (mode, floorIndex, roomIndex = null) => {
     setPopupMode(mode);
     setActiveFloorIndex(floorIndex);
     setActiveRoomIndex(roomIndex);
 
-    if (mode === "edit" && roomIndex !== null) {
+    if (mode === "edit") {
       const room = floors[floorIndex].rooms[roomIndex];
       setPopupData({
         roomNo: room.roomNo,
@@ -89,58 +112,36 @@ const MyRooms = () => {
     setTimeout(() => setPopupVisible(true), 20);
   };
 
-  // ✅ Close Popup
   const closePopup = () => {
     setPopupVisible(false);
-    setTimeout(() => setShowPopup(false), 250);
-    setPopupData({ roomNo: "", sharing: "" });
+    setTimeout(() => setShowPopup(false), 200);
   };
 
-  // ✅ Save Room
+  // SAVE ROOM
   const saveRoom = () => {
     const { roomNo, sharing } = popupData;
-    if (!roomNo || !sharing)
-      return alert("Please fill both Room Number and No. of Sharing.");
 
-    const numBeds = Math.min(6, Math.max(1, parseInt(sharing)));
-    const updatedFloors = [...floors];
+    if (!roomNo || !sharing) return alert("Fill all fields");
+
+    const newBeds = Array(Math.min(6, Math.max(1, Number(sharing)))).fill(false);
+
+    const updated = [...floors];
 
     if (popupMode === "add") {
-      updatedFloors[activeFloorIndex].rooms.push({
-        roomNo,
-        beds: Array(numBeds).fill(false),
-      });
-    } else if (popupMode === "edit") {
-      updatedFloors[activeFloorIndex].rooms[activeRoomIndex] = {
-        roomNo,
-        beds: Array(numBeds).fill(false),
-      };
+      updated[activeFloorIndex].rooms.push({ roomNo, beds: newBeds });
+    } else {
+      updated[activeFloorIndex].rooms[activeRoomIndex] = { roomNo, beds: newBeds };
     }
 
-    setFloors(updatedFloors);
+    setFloors(updated);
     closePopup();
-  };
-
-  // ✅ Handle Enter key in popup
-  const handlePopupKeyDown = (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      saveRoom();
-    }
-  };
-
-  // ✅ Handle Setup Enter Key
-  const handleSetupKeyDown = (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      generateLayout();
-    }
   };
 
   return (
     <div className="myrooms-container">
       <div className="myrooms-header">
-        <h2 className="page-title">My Rooms</h2>
+        <h2>My Rooms</h2>
+
         {floors.length > 0 && (
           <button className="add-floor-btn" onClick={addFloor}>
             + Add Floor
@@ -148,11 +149,12 @@ const MyRooms = () => {
         )}
       </div>
 
-      {/* Floors Display */}
+      {/* Render Floors */}
       {floors.map((floor, floorIndex) => (
         <div key={floorIndex} className="floor-section">
           <div className="floor-title">
-            {floor.floor}
+            <h3>{floor.floor}</h3>
+
             <button
               className="add-room-btn"
               onClick={() => openPopup("add", floorIndex)}
@@ -166,11 +168,12 @@ const MyRooms = () => {
               <div key={roomIndex} className="room-card">
                 <div className="room-header">
                   <h4>{room.roomNo}</h4>
+
                   <button
                     className="edit-btn"
                     onClick={() => openPopup("edit", floorIndex, roomIndex)}
                   >
-                    <span className="edit-icon">✏️</span> Edit
+                    ✏️ Edit
                   </button>
                 </div>
 
@@ -179,6 +182,7 @@ const MyRooms = () => {
                     src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=500&q=80"
                     alt="Room"
                   />
+
                   <div
                     className="beds-grid"
                     style={{
@@ -207,73 +211,64 @@ const MyRooms = () => {
         </div>
       ))}
 
-      {/* Initial Setup Popup */}
+      {/* INITIAL SETUP POPUP */}
       {setupPopup && (
         <div className="popup-overlay show">
-          <div
-            className="popup-content popup-in"
-            onKeyDown={handleSetupKeyDown}
-          >
+          <div className="popup-content popup-in">
             <h3>Setup Hostel Layout</h3>
-            <label>Number of Floors</label>
+
+            <label>Floors</label>
             <input
               type="number"
-              placeholder="Enter Number of Floors"
               value={setupData.floors}
               onChange={(e) =>
                 setSetupData({ ...setupData, floors: e.target.value })
               }
             />
-            <label>Number of Rooms per Floor</label>
+
+            <label>Rooms per Floor</label>
             <input
               type="number"
-              placeholder="Enter Rooms per Floor"
               value={setupData.roomsPerFloor}
               onChange={(e) =>
                 setSetupData({ ...setupData, roomsPerFloor: e.target.value })
               }
             />
-            <label>Default No. of Sharings</label>
+
+            <label>Sharing per Room</label>
             <input
               type="number"
-              placeholder="Enter Default Sharing"
               value={setupData.sharing}
               onChange={(e) =>
                 setSetupData({ ...setupData, sharing: e.target.value })
               }
             />
-            <div className="popup-buttons">
-              <button className="save-btn" onClick={generateLayout}>
-                Generate Layout
-              </button>
-            </div>
+
+            <button className="save-btn" onClick={generateLayout}>
+              Generate
+            </button>
           </div>
         </div>
       )}
 
-      {/* Add/Edit Room Popup */}
+      {/* ADD/EDIT ROOM POPUP */}
       {showPopup && (
         <div className={`popup-overlay ${popupVisible ? "show" : "hide"}`}>
-          <div
-            className={`popup-content ${
-              popupVisible ? "popup-in" : "popup-out"
-            }`}
-            onKeyDown={handlePopupKeyDown}
-          >
-            <h3>{popupMode === "add" ? "Add New Room" : "Edit Room"}</h3>
+          <div className={`popup-content ${popupVisible ? "popup-in" : "popup-out"}`}>
+            <h3>{popupMode === "add" ? "Add Room" : "Edit Room"}</h3>
+
             <label>Room Number</label>
             <input
               type="text"
-              placeholder="Enter Room Number"
               value={popupData.roomNo}
               onChange={(e) =>
                 setPopupData({ ...popupData, roomNo: e.target.value })
               }
             />
-            <label>No. of Sharing</label>
+
+            <label>Sharing</label>
             <input
               type="number"
-              placeholder="Enter No. of Sharing"
               min="1"
               max="6"
               value={popupData.sharing}
@@ -281,12 +276,14 @@ const MyRooms = () => {
                 setPopupData({ ...popupData, sharing: e.target.value })
               }
             />
+
             <div className="popup-buttons">
               <button className="cancel-btn" onClick={closePopup}>
                 Cancel
               </button>
+
               <button className="save-btn" onClick={saveRoom}>
-                {popupMode === "add" ? "Save Room" : "Update Room"}
+                {popupMode === "add" ? "Add" : "Update"}
               </button>
             </div>
           </div>
@@ -294,6 +291,4 @@ const MyRooms = () => {
       )}
     </div>
   );
-};
-
-export default MyRooms;
+}
