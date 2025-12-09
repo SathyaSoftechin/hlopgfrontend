@@ -286,3 +286,19 @@
     transform: translateX(0);
   }
 }
+
+.hostel-page {
+  padding-top: 75px;
+  position: relative;
+  z-index: 1;
+}
+
+.hostel-main {
+  display: flex;
+  gap: 25px;
+}
+
+/* ARROWS MUST STAY BELOW POPUP */
+.arrow-left, .arrow-right {
+  z-index: 10;
+}

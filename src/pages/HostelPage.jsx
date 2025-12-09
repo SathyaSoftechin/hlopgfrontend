@@ -3,8 +3,18 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import "./HostelPage.css";
 import {
-  FaWifi, FaFan, FaBed, FaTv, FaLightbulb, FaDoorClosed,
-  FaChevronLeft, FaChevronRight, FaStar, FaShower, FaLock, FaParking
+  FaWifi,
+  FaFan,
+  FaBed,
+  FaTv,
+  FaLightbulb,
+  FaDoorClosed,
+  FaChevronLeft,
+  FaChevronRight,
+  FaStar,
+  FaShower,
+  FaLock,
+  FaParking,
 } from "react-icons/fa";
 import { MdOutlineSmokeFree, MdNoDrinks } from "react-icons/md";
 import Popup from "../components/Popup";
@@ -54,26 +64,26 @@ const HostelPage = () => {
   }, [hostelId]);
 
   // Fetch reviews
- useEffect(() => {
-  if (isPopupOpen) return;
+  useEffect(() => {
+    if (isPopupOpen) return;
 
-  const fetchReviews = async () => {
-    try {
-      const res = await api.get(`/reviews/${hostelId}`);
-      if (res.data.ok) {
-        setHostelData(prev => ({
-          ...prev,
-          reviews: res.data.data.reviews,
-          avgRating: res.data.data.avgRating,
-          totalReviews: res.data.data.totalReviews
-        }));
+    const fetchReviews = async () => {
+      try {
+        const res = await api.get(`/reviews/${hostelId}`);
+        if (res.data.ok) {
+          setHostelData((prev) => ({
+            ...prev,
+            reviews: res.data.data.reviews,
+            avgRating: res.data.data.avgRating,
+            totalReviews: res.data.data.totalReviews,
+          }));
+        }
+      } catch (err) {
+        console.error("Error fetching reviews:", err);
       }
-    } catch (err) {
-      console.error("Error fetching reviews:", err);
-    }
-  };
-  fetchReviews();
-}, [hostelId, isPopupOpen]);
+    };
+    fetchReviews();
+  }, [hostelId, isPopupOpen]);
 
   // Fetch food menu
   useEffect(() => {
@@ -82,11 +92,11 @@ const HostelPage = () => {
         const res = await api.get(`/food_menu/${hostelId}`);
         if (res.data.ok) {
           const { breakfast, lunch, dinner } = res.data.data;
-          const days = Object.keys(breakfast || {}).map(day => ({
+          const days = Object.keys(breakfast || {}).map((day) => ({
             day,
             breakfast: breakfast[day] || "-",
             lunch: lunch[day] || "-",
-            dinner: dinner[day] || "-"
+            dinner: dinner[day] || "-",
           }));
           setFoodMenu(days);
         } else {
@@ -102,12 +112,14 @@ const HostelPage = () => {
     fetchFoodMenu();
   }, [hostelId]);
 
-  
-
   // Image carousel
-  const images = hostelData?.images?.length ? hostelData.images : [pg1, pg2, pg3, pg4, pg5];
-  const prevImage = () => setMainImageIndex(prev => prev === 0 ? images.length - 1 : prev - 1);
-  const nextImage = () => setMainImageIndex(prev => prev === images.length - 1 ? 0 : prev + 1);
+  const images = hostelData?.images?.length
+    ? hostelData.images
+    : [pg1, pg2, pg3, pg4, pg5];
+  const prevImage = () =>
+    setMainImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+  const nextImage = () =>
+    setMainImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
 
   // Continue Booking
   const handleContinue = async (data) => {
@@ -122,7 +134,7 @@ const HostelPage = () => {
         hostelId,
         hostelName: hostelData?.hostel_name,
         address: hostelData?.address,
-        ...data
+        ...data,
       };
 
       const res = await api.post("/booking/newbooking", payload);
@@ -163,8 +175,7 @@ const HostelPage = () => {
 
       if (res.data.success) {
         setUserId(res.data.user.id || res.data.user.user_id);
-                setIsPopupOpen(true);
-
+        setIsPopupOpen(true);
       } else {
         alert("Not authorized. Please log in again.");
         localStorage.removeItem("hlopgToken");
@@ -183,16 +194,18 @@ const HostelPage = () => {
 
   return (
     <div className="hostel-page">
-
       {/* Hostel UI */}
       <div className="hostel-main">
-
         {/* Left Images */}
         <div className="hostel-images">
           <div className="main-img">
-            <button className="arrow-left" onClick={prevImage}><FaChevronLeft /></button>
+            <button className="arrow-left" onClick={prevImage}>
+              <FaChevronLeft />
+            </button>
             <img src={images[mainImageIndex]} alt="Room" />
-            <button className="arrow-right" onClick={nextImage}><FaChevronRight /></button>
+            <button className="arrow-right" onClick={nextImage}>
+              <FaChevronRight />
+            </button>
           </div>
 
           <div className="thumbnail-container">
@@ -212,34 +225,86 @@ const HostelPage = () => {
         <div className="hostel-details">
           <h2 className="black-text">{hostelData.hostel_name}</h2>
           <p className="black-text">{hostelData.address}</p>
-          <p className="black-text"><b>Type of Living:</b> {hostelData.pg_type}'s PG</p>
+          <p className="black-text">
+            <b>Type of Living:</b> {hostelData.pg_type}'s PG
+          </p>
 
           {/* Pricing */}
           <div className="stats">
-            {Object.entries(hostelData.sharing || {}).map(([sharing, price], idx) => (
-              <div key={idx} className="stat-container">
-                <span className="stat-btn black-text">{sharing} 👤 ₹{price}</span>
-              </div>
-            ))}
+            {Object.entries(hostelData.sharing || {}).map(
+              ([sharing, price], idx) => (
+                <div key={idx} className="stat-container">
+                  <span className="stat-btn black-text">
+                    {sharing} 👤 ₹{price}
+                  </span>
+                </div>
+              )
+            )}
           </div>
 
           {/* Amenities */}
           <h3 className="black-text">Amenities</h3>
           <div className="furnished-icons">
-
-            {hostelData?.amenities?.ac && <span><FaFan /> AC</span>}
-            {hostelData?.amenities?.tv && <span><FaTv /> TV</span>}
-            {hostelData?.amenities?.bed && <span><FaBed /> Bed</span>}
-            {hostelData?.amenities?.fan && <span><FaFan /> Fan</span>}
-            {hostelData?.amenities?.gym && <span><FaDoorClosed /> Gym</span>}
-            {hostelData?.amenities?.food && <span><FaLightbulb /> Food Included</span>}
-            {hostelData?.amenities?.wifi && <span><FaWifi /> Free WiFi</span>}
-            {hostelData?.amenities?.water && <span><FaShower /> Water</span>}
-            {hostelData?.amenities?.geyser && <span><FaShower /> Geyser</span>}
-            {hostelData?.amenities?.lights && <span><FaLightbulb /> Lights</span>}
-            {hostelData?.amenities?.parking && <span><FaParking /> Parking</span>}
-            {hostelData?.amenities?.cupboard && <span><FaDoorClosed /> Cupboard</span>}
-
+            {hostelData?.amenities?.ac && (
+              <span>
+                <FaFan /> AC
+              </span>
+            )}
+            {hostelData?.amenities?.tv && (
+              <span>
+                <FaTv /> TV
+              </span>
+            )}
+            {hostelData?.amenities?.bed && (
+              <span>
+                <FaBed /> Bed
+              </span>
+            )}
+            {hostelData?.amenities?.fan && (
+              <span>
+                <FaFan /> Fan
+              </span>
+            )}
+            {hostelData?.amenities?.gym && (
+              <span>
+                <FaDoorClosed /> Gym
+              </span>
+            )}
+            {hostelData?.amenities?.food && (
+              <span>
+                <FaLightbulb /> Food Included
+              </span>
+            )}
+            {hostelData?.amenities?.wifi && (
+              <span>
+                <FaWifi /> Free WiFi
+              </span>
+            )}
+            {hostelData?.amenities?.water && (
+              <span>
+                <FaShower /> Water
+              </span>
+            )}
+            {hostelData?.amenities?.geyser && (
+              <span>
+                <FaShower /> Geyser
+              </span>
+            )}
+            {hostelData?.amenities?.lights && (
+              <span>
+                <FaLightbulb /> Lights
+              </span>
+            )}
+            {hostelData?.amenities?.parking && (
+              <span>
+                <FaParking /> Parking
+              </span>
+            )}
+            {hostelData?.amenities?.cupboard && (
+              <span>
+                <FaDoorClosed /> Cupboard
+              </span>
+            )}
           </div>
 
           {/* Rules */}
@@ -270,19 +335,24 @@ const HostelPage = () => {
 
             {hostelData.reviews?.length ? (
               hostelData.reviews.map((review, idx) => (
-                <div key={idx} className={`review-card ${currentReviewIndex === idx ? "active" : ""}`}>
-                  <p className="black-text">⭐ {review.rating || "No rating"} {review.review_text || "No review text."}</p>
+                <div
+                  key={idx}
+                  className={`review-card ${
+                    currentReviewIndex === idx ? "active" : ""
+                  }`}
+                >
+                  <p className="black-text">
+                    ⭐ {review.rating || "No rating"}{" "}
+                    {review.review_text || "No review text."}
+                  </p>
                 </div>
               ))
             ) : (
               <p className="black-text">No reviews available yet.</p>
             )}
           </div>
-
-                   
-
-                  </div>
-                </div>
+        </div>
+      </div>
 
       {/* Food Menu */}
       <div className="food-menu">
@@ -303,15 +373,33 @@ const HostelPage = () => {
               {foodMenu.map((day, idx) => (
                 <tr key={idx}>
                   <td>{day.day}</td>
-                  <td>{Array.isArray(day.breakfast)
-                    ? day.breakfast.join(", ")
-                    : day.breakfast?.split(/[\n,]+/).map(i => i.trim()).filter(Boolean).join(", ")}</td>
-                  <td>{Array.isArray(day.lunch)
-                    ? day.lunch.join(", ")
-                    : day.lunch?.split(/[\n,]+/).map(i => i.trim()).filter(Boolean).join(", ")}</td>
-                  <td>{Array.isArray(day.dinner)
-                    ? day.dinner.join(", ")
-                    : day.dinner?.split(/[\n,]+/).map(i => i.trim()).filter(Boolean).join(", ")}</td>
+                  <td>
+                    {Array.isArray(day.breakfast)
+                      ? day.breakfast.join(", ")
+                      : day.breakfast
+                          ?.split(/[\n,]+/)
+                          .map((i) => i.trim())
+                          .filter(Boolean)
+                          .join(", ")}
+                  </td>
+                  <td>
+                    {Array.isArray(day.lunch)
+                      ? day.lunch.join(", ")
+                      : day.lunch
+                          ?.split(/[\n,]+/)
+                          .map((i) => i.trim())
+                          .filter(Boolean)
+                          .join(", ")}
+                  </td>
+                  <td>
+                    {Array.isArray(day.dinner)
+                      ? day.dinner.join(", ")
+                      : day.dinner
+                          ?.split(/[\n,]+/)
+                          .map((i) => i.trim())
+                          .filter(Boolean)
+                          .join(", ")}
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -323,19 +411,18 @@ const HostelPage = () => {
 
       {/* Book Now */}
       <div className="book-now">
-<button className="book-now-btn" onClick={handleBookNow}>
-  Book Now
-</button>      </div>
+        <button className="book-now-btn" onClick={handleBookNow}>
+          Book Now
+        </button>{" "}
+      </div>
 
-
-       {isPopupOpen && (
-  <Popup
-    hostel={hostelData}
-    onClose={() => setIsPopupOpen(false)}
-    onContinue={handleContinue}
-  />
-)}
-
+      {isPopupOpen && (
+        <Popup
+          hostel={hostelData}
+          onClose={() => setIsPopupOpen(false)}
+          onContinue={handleContinue}
+        />
+      )}
     </div>
   );
 };

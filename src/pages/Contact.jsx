@@ -87,12 +87,12 @@ const Contact = () => {
             <p>support@hlopg.com</p>
             <small>Assistance hours: 24/7</small>
           </div>
-          <div className="info-item">
+          {/* <div className="info-item">
             <h4>Phone Number</h4>
             <div className="divider"></div>
             <p>+91 1234567890</p>
             <small>Assistance hours: 24/7</small>
-          </div>
+          </div> */}
         </div>
       </section>
     </div>

@@ -327,3 +327,22 @@
   margin-bottom: -35px !important;
 }
 
+.wishlist {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 5;
+  cursor: pointer;
+}
+
+.unliked-heart {
+  font-size: 22px;
+  color: white;
+  stroke: black;
+  stroke-width: 30;
+}
+
+.liked-heart {
+  font-size: 22px;
+  color: red;
+}

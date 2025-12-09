@@ -173,7 +173,7 @@ export default function MyRooms() {
                     className="edit-btn"
                     onClick={() => openPopup("edit", floorIndex, roomIndex)}
                   >
-                    ✏️ Edit
+                    Edit
                   </button>
                 </div>
 
