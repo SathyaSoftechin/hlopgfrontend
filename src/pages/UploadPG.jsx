@@ -36,19 +36,99 @@ const UploadPG = ({ user }) => {
 
   // location data
   const locationData = {
-    Telangana: {
-      Hyderabad: ["Ameerpet", "Kukatpally", "Madhapur", "Gachibowli"],
-      Warangal: ["Hanamkonda", "Kazipet"],
-    },
-    Karnataka: {
-      Bangalore: ["BTM Layout", "Whitefield", "HSR Layout", "Indiranagar"],
-      Mysore: ["Vijayanagar", "Gokulam"],
-    },
-    AndhraPradesh: {
-      Vijayawada: ["Benz Circle", "Poranki", "Gunadala"],
-      Vizag: ["MVP Colony", "Gajuwaka"],
-    },
-  };
+  Telangana: {
+    Hyderabad: [
+      "Ameerpet",
+      "Dilshuknagar",
+      "Gachibowli",
+      "Gandimaisamma",
+      "Kondapur",
+      "KPHB",
+      "LB Nagar",
+      "Medchal",
+      "Moosapet",
+      "Madhapur",
+      "Patancheruvu",
+      "Uppal"
+    ],
+    Warangal: ["Hanamkonda", "Kazipet"]
+  },
+
+  Karnataka: {
+    Bangalore: [
+      "Bannerghatta",
+      "Basavanagudi",
+      "Devanahalli",
+      "Electronic City",
+      "Hebbal",
+      "Hoskote",
+      "HSR Layout",
+      "Indiranagar",
+      "Jayanagar",
+      "Kengeri",
+      "Koramangala",
+      "Madiwala",
+      "Marathahalli",
+      "Sarjapur Road",
+      "Ulsoor",
+      "Whitefield"
+    ],
+    Mysore: ["Gokulam", "Vijayanagar"]
+  },
+
+  AndhraPradesh: {
+    Vijayawada: ["Benz Circle", "Gunadala", "Poranki"],
+    Vizag: ["Gajuwaka", "MVP Colony"]
+  },
+
+  Maharashtra: {
+    Mumbai: [
+      "Airoli",
+      "Andheri",
+      "Borivali",
+      "Chembur",
+      "Goregaon",
+      "Jogeshwari",
+      "Juhu",
+      "Kandivali",
+      "Kurla",
+      "Malabar Hill",
+      "Marine Drive",
+      "Mira Road",
+      "Powai",
+      "Thane",
+      "Vikhroli",
+      "Virar"
+    ],
+    Pune: [
+      "Aundh",
+      "Baner",
+      "Hadapsar",
+      "Hinjewadi",
+      "Kalyani Nagar",
+      "Kharadi",
+      "Koregaon Park",
+      "Kothrud"
+    ]
+  },
+
+  TamilNadu: {
+    Chennai: [
+      "Ambattur",
+      "Anna Nagar",
+      "Gopalapuram",
+      "Kotturpuram",
+      "Medavakkam",
+      "Navalur",
+      "Perungudi",
+      "Porur",
+      "Semmancheri",
+      "Tambaram",
+      "Thoraipakkam",
+      "Velachery"
+    ]
+  }
+};
 
   // room-setup popup states
   const [showRoomSetup, setShowRoomSetup] = useState(false);
