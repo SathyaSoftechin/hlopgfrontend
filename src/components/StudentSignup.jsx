@@ -50,24 +50,37 @@ const StudentSignup = () => {
     switch (name) {
       case "name":
         if (!value.trim()) message = "Name is required.";
-        else if (value.trim().length < 3) message = "Name must be at least 3 characters.";
-        else if (value.trim().length > 22) message = "Name cannot exceed 22 characters.";
+        else if (value.trim().length < 3)
+          message = "Name must be at least 3 characters.";
+        else if (value.trim().length > 22)
+          message = "Name cannot exceed 22 characters.";
         else isValid = true;
         break;
 
       case "email":
-        if (!emailRegex.test(value)) message = "Enter a valid email address.";
-        else isValid = true;
+        if (!emailRegex.test(value)) {
+          message = "Enter a valid email address.";
+        } else if (
+          !value.endsWith("@gmail.com") &&
+          !value.endsWith("@outlook.com")
+        ) {
+          message = "Only Gmail or Outlook email addresses are allowed.";
+        } else {
+          isValid = true;
+        }
         break;
 
       case "phone":
-        if (!/^\d*$/.test(value)) message = "Phone number must contain only digits.";
-        else if (!phoneRegex.test(value)) message = "Enter valid Indian phone number (10–12 digits).";
+        if (!/^\d*$/.test(value))
+          message = "Phone number must contain only digits.";
+        else if (!phoneRegex.test(value))
+          message = "Enter valid Indian phone number (10–12 digits).";
         else isValid = true;
         break;
 
       case "password":
-        if (!passwordRegex.test(value)) message = "Min 6 chars, must include letters & numbers.";
+        if (!passwordRegex.test(value))
+          message = "Min 6 chars, must include letters & numbers.";
         else isValid = true;
         break;
 
@@ -90,8 +103,10 @@ const StudentSignup = () => {
     validateField(name, value);
 
     // Clear API error for the relevant field
-    if ((name === "phone" && apiError.includes("Phone")) ||
-        (name === "email" && apiError.includes("Email"))) {
+    if (
+      (name === "phone" && apiError.includes("Phone")) ||
+      (name === "email" && apiError.includes("Email"))
+    ) {
       setApiError("");
     }
   };
@@ -118,13 +133,16 @@ const StudentSignup = () => {
       console.log("OTP sent:", res.data);
       sendOTP();
     } catch (err) {
-      const backendMsg = err.response?.data?.message || err.response?.data?.error || "";
+      const backendMsg =
+        err.response?.data?.message || err.response?.data?.error || "";
 
       if (backendMsg.includes("users_phone_key")) {
         setApiError("Phone number already exists. Please use another number.");
         phoneRef.current.focus();
       } else if (backendMsg.includes("users_email_key")) {
-        setApiError("Email already registered. Please use another email or log in instead.");
+        setApiError(
+          "Email already registered. Please use another email or log in instead."
+        );
         emailRef.current.focus();
       } else {
         setApiError(backendMsg || "Registration failed. Please try again.");
@@ -161,7 +179,9 @@ const StudentSignup = () => {
       }
     } catch (err) {
       console.error(err);
-      alert(err.response?.data?.message || "Something went wrong. Please try again.");
+      alert(
+        err.response?.data?.message || "Something went wrong. Please try again."
+      );
     }
   };
 
@@ -196,7 +216,13 @@ const StudentSignup = () => {
               placeholder="Full Name"
               value={formData.name}
               onChange={handleChange}
-              className={validFields.name ? "valid-input" : errors.name ? "invalid-input" : ""}
+              className={
+                validFields.name
+                  ? "valid-input"
+                  : errors.name
+                  ? "invalid-input"
+                  : ""
+              }
               required
             />
             {validFields.name && <span className="valid-tick">✓</span>}
@@ -210,7 +236,13 @@ const StudentSignup = () => {
               placeholder="Email Address"
               value={formData.email}
               onChange={handleChange}
-              className={validFields.email ? "valid-input" : errors.email ? "invalid-input" : ""}
+              className={
+                validFields.email
+                  ? "valid-input"
+                  : errors.email
+                  ? "invalid-input"
+                  : ""
+              }
               required
             />
             {validFields.email && <span className="valid-tick">✓</span>}
@@ -224,7 +256,13 @@ const StudentSignup = () => {
               placeholder="Phone Number"
               value={formData.phone}
               onChange={handleChange}
-              className={validFields.phone ? "valid-input" : errors.phone ? "invalid-input" : ""}
+              className={
+                validFields.phone
+                  ? "valid-input"
+                  : errors.phone
+                  ? "invalid-input"
+                  : ""
+              }
               required
             />
             {validFields.phone && <span className="valid-tick">✓</span>}
@@ -248,7 +286,13 @@ const StudentSignup = () => {
               placeholder="Password"
               value={formData.password}
               onChange={handleChange}
-              className={validFields.password ? "valid-input" : errors.password ? "invalid-input" : ""}
+              className={
+                validFields.password
+                  ? "valid-input"
+                  : errors.password
+                  ? "invalid-input"
+                  : ""
+              }
               required
             />
             {validFields.password && <span className="valid-tick">✓</span>}
@@ -261,10 +305,18 @@ const StudentSignup = () => {
               placeholder="Confirm Password"
               value={formData.confirmPassword}
               onChange={handleChange}
-              className={validFields.confirmPassword ? "valid-input" : errors.confirmPassword ? "invalid-input" : ""}
+              className={
+                validFields.confirmPassword
+                  ? "valid-input"
+                  : errors.confirmPassword
+                  ? "invalid-input"
+                  : ""
+              }
               required
             />
-            {validFields.confirmPassword && <span className="valid-tick">✓</span>}
+            {validFields.confirmPassword && (
+              <span className="valid-tick">✓</span>
+            )}
           </div>
 
           {Object.values(errors).some((msg) => msg) && (

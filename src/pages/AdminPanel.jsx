@@ -18,7 +18,7 @@ import UploadPG from "./UploadPG";
 import PGMembersList from "./PGMembersList";
 import PaymentsList from "./PaymentsList";
 import Reviews from "./Reviews";
-import MyRooms from "./MyRooms";
+// import MyRooms from "./MyRooms";
 
 import "./AdminPanel.css";
 import { useNavigate } from "react-router-dom";
@@ -32,7 +32,7 @@ const sidebarOptions = [
   { name: "PG Members List", icon: <FaUser /> },
   { name: "Payments List", icon: <FaMoneyBill /> },
   { name: "Reviews", icon: <FaHeart /> },
-  { name: "My Rooms", icon: <FaCogs /> },
+  // { name: "My Rooms", icon: <FaCogs /> },
 ];
 
 
@@ -111,7 +111,7 @@ const [user, setUser] = useState(null);
       case "PG Members List": return <PGMembersList  user={user} />;
       case "Payments List":   return <PaymentsList />;
       case "Reviews":         return <Reviews />;
-      case "My Rooms":        return <MyRooms />;
+      // case "My Rooms":        return <MyRooms />;
       default:
         return <div className="placeholder">
           <h2>{selected}</h2>

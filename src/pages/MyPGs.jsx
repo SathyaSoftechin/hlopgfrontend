@@ -61,7 +61,7 @@ const MyPGs = ({ user }) => {
               <h4>{pg.hostel_name}</h4>
               <div className="pg-actions">
                 <button onClick={() => handleAction(pg.hostel_id, "editPG")}>
-                  Edit Room Details
+                  View Room's
                 </button>
                 <button onClick={() => handleAction(pg.hostel_id, "editRooms")}>
                   Edit PG Details

@@ -101,10 +101,10 @@ const EditRooms = () => {
 
   return (
     <div className="edit-rooms-page">
-      <h2>Edit Rooms by Floor</h2>
+      <h2></h2>
 
       <button className="add-floor-btn" onClick={addFloor}>
-        + Add Floor
+        
       </button>
 
       {Object.keys(floors).map((floor) => (

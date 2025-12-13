@@ -57,8 +57,16 @@ const OwnerSignup = () => {
         break;
 
       case "email":
-        if (!emailRegex.test(value)) message = "Enter a valid email address.";
-        else isValid = true;
+        if (!emailRegex.test(value)) {
+          message = "Enter a valid email address.";
+        } else if (
+          !value.endsWith("@gmail.com") &&
+          !value.endsWith("@outlook.com")
+        ) {
+          message = "Only Gmail or Outlook email addresses are allowed.";
+        } else {
+          isValid = true;
+        }
         break;
 
       case "phone":

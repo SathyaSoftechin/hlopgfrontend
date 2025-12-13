@@ -185,8 +185,7 @@ function Home() {
                         </div>
 
                           <p className="pg-location new-location">
-                            <span class="lsicon--location-outline">
-                            </span>{pg.location}
+                            <span class="mdi--location-radius"></span>{pg.location}
                           </p>
 
                         <div className="facility-row">
