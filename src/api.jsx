@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://hlopgbackend.vercel.app/api",
+  baseURL: "https://72.61.241.195:5000/api",
   timeout: 10000, // ⏳ 10 sec max wait (detect slow server)
 });
 
