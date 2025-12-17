@@ -3,9 +3,9 @@
   position: fixed;
   top: 10px;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-53%);
   width: 95%;
-  height: auto;
+  height: 64px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -47,7 +47,7 @@
   -webkit-backdrop-filter: blur(12px);
   border-radius: 50px;
   width: 85%;
-  height: 60px;
+  height: 55px;
   padding: 0 25px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   transition: all 0.4s ease, box-shadow 0.3s ease;
@@ -62,6 +62,7 @@
   /* Layout helpers for consistent positioning */
   order: 0;
   flex: 0 0 auto;
+  justify-content: center; /* left | center | flex-end */
 }
 
 .logo {
@@ -70,7 +71,7 @@
   border-radius: 50%;
   object-fit: cover;
   transition: width 0.3s ease, transform 0.3s ease;
-  display: flex;
+  display: block;
   align-items: center !important;
 }
 
@@ -444,6 +445,7 @@
 @media (max-width: 900px) {
   .logo {
     font-size: 18px;
+    transform: translateY(4px);
   }
 }
 
@@ -481,6 +483,15 @@
 }
 
 @media (max-width: 768px) {
+  .header {
+    height: 60px; /* 🔒 mobile safe */
+    padding: 0 16px;
+  }
+
+  .logo {
+    margin-top: 4px;
+  }
+
   .hamburger {
     display: block;
   }
@@ -490,7 +501,8 @@
     position: fixed;
     top: 70px;
     right: -100%;
-    width: 85%;
+    width: 80%;
+    height: 60px;
     max-width: 320px;
     height: 100vh;
     background: #ffffff;
@@ -553,9 +565,9 @@
   }
 
   /* ensure brand stays left and hamburger right on small screens */
-  .brand { order: 0; }
-  .header .center { order: 1; justify-content: flex-start; }
-  .hamburger { order: 3; }
+  .brand { order: 0; margin-top: 7px;}
+  .header .center { order: 2; justify-content: center; }
+  .hamburger { order: 3; margin-top: 5px; margin-right: 10px;}
 }
 
 /* ================= Profile Dropdown ================= */
