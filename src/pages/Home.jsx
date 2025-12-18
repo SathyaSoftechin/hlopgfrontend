@@ -9,11 +9,6 @@ import {
   FaUtensils,
   FaBroom,
   FaShower,
-  FaWifi,
-  FaTv,
-  FaBolt,
-  FaSnowflake,
-  FaWater,
   FaChevronLeft,
   FaChevronRight,
 } from "react-icons/fa";
@@ -30,6 +25,7 @@ function Home() {
   const [arrowVisibility, setArrowVisibility] = useState([]);
   const [hostels, setHostels] = useState([]);
 
+  /* ---------------- Fetch Hostels ---------------- */
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -42,6 +38,7 @@ function Home() {
     fetchData();
   }, []);
 
+  /* ---------------- Cities ---------------- */
   const [cities, setCities] = useState([
     { name: "Hostel's in Hyderabad", bg: hyderabadBg, pgList: [] },
     { name: "Hostel's in Chennai", bg: chennaiBg, pgList: [] },
@@ -57,6 +54,7 @@ function Home() {
           const filtered = hostels.filter((h) =>
             city.name.toLowerCase().includes(h.city?.toLowerCase() || "")
           );
+
           return {
             ...city,
             pgList: filtered.map((h, i) => ({
@@ -74,6 +72,7 @@ function Home() {
     }
   }, [hostels]);
 
+  /* ---------------- Hero Background Rotation ---------------- */
   const [currentBg, setCurrentBg] = useState(0);
   useEffect(() => {
     const interval = setInterval(() => {
@@ -82,37 +81,40 @@ function Home() {
     return () => clearInterval(interval);
   }, [cities.length]);
 
+  /* ---------------- Scroll Arrows ---------------- */
   const updateArrowVisibility = (cityIndex) => {
     const container = pgRefs.current[cityIndex];
-    if (container) {
-      const { scrollLeft, scrollWidth, clientWidth } = container;
-      setArrowVisibility((prev) => {
-        const newVis = [...prev];
-        newVis[cityIndex] = {
-          left: scrollLeft > 0,
-          right: scrollLeft + clientWidth < scrollWidth - 1,
-        };
-        return newVis;
-      });
-    }
+    if (!container) return;
+
+    const { scrollLeft, scrollWidth, clientWidth } = container;
+    setArrowVisibility((prev) => {
+      const next = [...prev];
+      next[cityIndex] = {
+        left: scrollLeft > 0,
+        right: scrollLeft + clientWidth < scrollWidth - 1,
+      };
+      return next;
+    });
   };
 
   const scrollPG = (cityIndex, direction) => {
     const container = pgRefs.current[cityIndex];
-    if (container) {
-      const scrollAmount = container.clientWidth;
-      container.scrollBy({
-        left: direction === "next" ? scrollAmount : -scrollAmount,
-        behavior: "smooth",
-      });
-      setTimeout(() => updateArrowVisibility(cityIndex), 300);
-    }
+    if (!container) return;
+
+    const scrollAmount = container.clientWidth;
+    container.scrollBy({
+      left: direction === "next" ? scrollAmount : -scrollAmount,
+      behavior: "smooth",
+    });
+
+    setTimeout(() => updateArrowVisibility(cityIndex), 300);
   };
 
   useEffect(() => {
     cities.forEach((_, i) => updateArrowVisibility(i));
   }, [cities]);
 
+  /* ---------------- Facilities ---------------- */
   const facilityIcons = {
     Beds: <FaBed />,
     Food: <FaUtensils />,
@@ -120,39 +122,53 @@ function Home() {
     Wash: <FaShower />,
   };
 
+  /* ---------------- Render ---------------- */
   return (
     <div className="home">
-      <div className="hero" style={{ backgroundImage: `url(${cities[currentBg].bg})` }}>
+      <div
+        className="hero"
+        style={{ backgroundImage: `url(${cities[currentBg].bg})` }}
+      >
         <div className="overlay">
           <h1 className="title">HloPG</h1>
-          <p className="subtitle">Because finding a PG shouldn't feel like a struggle.</p>
+          <p className="subtitle">
+            Because finding a PG shouldn't feel like a struggle.
+          </p>
         </div>
       </div>
 
       {cities.map((city, index) => {
-        const cityRouteName = city.name.match(/in (\w+)/i)?.[1] || "Unknown";
+        const cityRouteName =
+          city.name.match(/in (\w+)/i)?.[1] || "unknown";
 
         return (
           <div key={index} className="city-section">
             <div className="city-header">
               <h2>{city.name}</h2>
-              <button
+              <div
                 className="know-more-btn"
-                onClick={() => navigate(`/city/${cityRouteName.toLowerCase()}`)}
+                onClick={() =>
+                  navigate(`/city/${cityRouteName.toLowerCase()}`)
+                }
               >
-                View More Hostels
-              </button>
+                See More...
+              </div>
             </div>
 
             <div className="pg-container">
               <button
-                className={`arrow left ${arrowVisibility[index]?.left ? "show" : "hide"}`}
+                className={`arrow left ${
+                  arrowVisibility[index]?.left ? "show" : "hide"
+                }`}
                 onClick={() => scrollPG(index, "prev")}
               >
                 <FaChevronLeft />
               </button>
+
               <button
-                className={`arrow right ${arrowVisibility[index]?.right ? "show" : "hide"}`}
+                className={`arrow right ${
+                  arrowVisibility[index]?.right ? "show" : "hide"
+                }`}
                 onClick={() => scrollPG(index, "next")}
               >
                 <FaChevronRight />
@@ -165,50 +181,56 @@ function Home() {
               >
                 <div className="pg-track">
                   {city.pgList.map((pg) => (
-                    <div
-                      key={pg.id}
-                      className="pg-card new-pg-card"
-                      onClick={() => navigate(`/hostel/${pg.id}`)}
-                    >
-                      <div className="pg-image new-img">
-                        <img src={pg.img} alt={pg.name} />
-                        <FaHeart className="wishlist" />
-                      </div>
-
-                      <div className="pg-details new-details">
-                        <div className="pg-header new-header">
-                          <h3 className="pg-name new-name">{pg.name}</h3>
-                          <div className="pg-rating new-rating">
-                            <FaStar className="star" />
-                            <span>{pg.rating}</span>
-                          </div>
+                    <div key={pg.id} className="pg-card new-pg-card">
+                      {/* 🔑 Click handler moved INSIDE */}
+                      <div
+                        className="pg-card-click"
+                        onClick={() =>
+                          navigate(`/hostel/${pg.id}`)
+                        }
+                      >
+                        <div className="pg-image new-img">
+                          <img src={pg.img} alt={pg.name} />
+                          <FaHeart className="wishlist" />
                         </div>
+
+                        <div className="pg-details new-details">
+                          <div className="pg-header new-header">
+                            <h3 className="pg-name new-name">
+                              {pg.name}
+                            </h3>
+                            <div className="pg-rating new-rating">
+                              <FaStar className="star" />
+                              <span>{pg.rating}</span>
+                            </div>
+                          </div>
 
                           <p className="pg-location new-location">
-                            <span class="mdi--location-radius"></span>{pg.location}
+                            <span className="mdi--location-radius"></span>
+                            {pg.location}
                           </p>
 
-                        <div className="facility-row">
-                          {pg.facilities.map((f, i) => (
-                            <div className="facility-block" key={i}>
-                              {facilityIcons[f]}
-                              <span>{f}</span>
-                            </div>
-                          ))}
+                          <div className="facility-row">
+                            {pg.facilities.map((f, i) => (
+                              <div
+                                className="facility-block"
+                                key={i}
+                              >
+                                {facilityIcons[f]}
+                                <span>{f}</span>
+                              </div>
+                            ))}
+                          </div>
+
+                          <div className="start">Starts From</div>
+
+                          <div className="price-row">
+                            <h4 className="price">{pg.price}</h4>
+                            <span className="per">Per person</span>
+                          </div>
                         </div>
-
-                        <span>
-                          <h5 className="start">Starts From</h5> <br />
-                        </span>
-
-                        <div className="price-row">
-                          
-                          <h4 className="price">{pg.price}</h4>
-                          <span className="per">Per person</span>
-                        </div>
-
-                        {/* <button className="know-more new-knowmore">Know More...</button> */}
                       </div>
+                      {/* end pg-card-click */}
                     </div>
                   ))}
                 </div>
