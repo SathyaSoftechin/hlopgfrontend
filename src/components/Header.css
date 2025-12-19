@@ -558,6 +558,7 @@
 
   .mobile-search .search-input {
     width: 100%;
+    margin-left: 10px;
   }
 
   .mobile-search .suggestions-dropdown {
