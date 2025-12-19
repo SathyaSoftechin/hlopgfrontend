@@ -19,9 +19,9 @@ html, body {
 .footer {
   background-color: #000;
   color: #fff;
-  padding: 40px 30px;
+  padding: 10px 30px;
   width: 95.25%;
-  margin-top: auto;
+  margin-top: auto;  
 }
 
 .footer-container {

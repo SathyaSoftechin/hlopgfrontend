@@ -315,47 +315,6 @@
   opacity: 1;
 }
 
-/* ================= Responsive ================= */
-@media (max-width: 768px) {
-
-  .hero {
-    height: 40vh;
-  }
-
-  .city-header h2 {
-  font-size: 20px;
-}
-
-  .pg-card {
-    min-width: 220px !important;
-    max-width: 220px;
-  }
-
-  .hero .title {
-    font-size: 48px !important;
-  }
-
-  .hero .subtitle {
-    font-size: 20px !important;
-  }
-
-  /* ✅ KEEP NAME & RATING IN SAME LINE */
-  .pg-header {
-    flex-direction: row; /* 🔑 important */
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .pg-name {
-    font-size: 16px;
-  }
-
-  .pg-rating {
-    margin: 0; /* 🔑 remove hacks */
-    font-size: 14px;
-  }
-}
-
 .lsicon--location-outline {
   display: inline-block;
   width: 28px;
@@ -412,4 +371,14 @@
   mask-repeat: no-repeat;
   -webkit-mask-size: 100% 100%;
   mask-size: 100% 100%;
+}
+
+/* ==============================
+   📌 600px — Mobile
+=================================*/
+@media (max-width: 600px) {
+
+  .city-header h2 {
+    font-size: 18px;
+  }
 }
