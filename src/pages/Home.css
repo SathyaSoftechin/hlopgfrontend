@@ -75,7 +75,7 @@
 
 .city-header h2 {
   font-size: 26px;
-  font-weight: 600;
+  font-weight: 700;
   color: #7556ff;
 }
 
@@ -88,7 +88,7 @@
   border-radius: 8px;
   cursor: pointer;
   font-size: 18px;
-  font-weight: 800 !important;
+  font-weight: 500 !important;
   transition: 0.3s;
 }
 
@@ -282,13 +282,13 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: #ffffff00;
+  background: #00000000;
   color: #7556ff;
   border: none;
   font-size: 30px;
   /* border-radius: 50%; */
   width: 40px;
-  height: 250px;
+  height: 395px;
   cursor: pointer;
   transition: 0.3s ease;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -296,7 +296,7 @@
 }
 
 .arrow:hover {
-  background: #7556ff00;
+  background: #00000000;
   color: #7556ff;
   transform: translateY(-50%) scale(1.1);
 }
@@ -305,7 +305,7 @@
   left: -30px;
 }
 .arrow.right {
-  right: -30px;
+  right: 0px;
 }
 .arrow.hide {
   opacity: 0;
@@ -427,7 +427,7 @@
 
 @media (max-width: 480px) {
   .city-header h2 {
-    font-size: 16px;
+    font-size: 20px;
   }
 
   .hero {
