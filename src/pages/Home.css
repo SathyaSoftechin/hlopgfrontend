@@ -405,7 +405,7 @@
 /* --------- Tablet Portrait & Modern Mobiles (768px) --------- */
 @media (max-width: 768px) {
   .city-header h2 {
-    font-size: 18px;
+    font-size: 16px;
   }
   .hero {
     height: 40vh;
@@ -417,7 +417,7 @@
 =================================*/
 @media (max-width: 600px) {
 .city-header h2 {
-    font-size: 18px;
+    font-size: 16px;
   }
 
   .hero {
@@ -427,7 +427,7 @@
 
 @media (max-width: 480px) {
   .city-header h2 {
-    font-size: 20px;
+    font-size: 16px;
   }
 
   .hero {
