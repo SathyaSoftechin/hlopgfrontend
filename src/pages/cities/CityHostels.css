@@ -217,58 +217,25 @@
 
 /* ================= Responsive ================= */
 @media (max-width: 768px) {
-
-  /* Keep BOTH filters in one line */
+  .city-overlay h1 {
+    font-size: 2rem;
+  }
+  .city-overlay p {
+    font-size: 1rem;
+  }
+  .pg-grid {
+    padding: 40px 5%;
+  }
   .area-gender-filter {
     padding: 0 5%;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: center;
-    column-gap: 12px;
-    row-gap: 6px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
   }
-
-  
-
-  .area-gender-filter select {
-    width: 40% !important;
-  }
-
-  /* Labels align left */
-  .area-gender-filter label {
-    margin-bottom: 0;
-  }
-
-  /* Dropdowns take full width of their column */
   .area-gender-filter select {
     width: 100%;
   }
 }
-
-@media (max-width: 768px) {
-
-  /* Make Area + Gender stay in one row */
-  .area-gender-filter {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: 10px;
-    row-gap: 8px;
-    align-items: start;
-  }
-
-  /* Label above dropdown */
-  .area-gender-filter label {
-    display: block;
-    margin-bottom: 4px;
-    font-size: 0.9rem;
-  }
-
-  /* Dropdown full width inside its column */
-  .area-gender-filter select {
-    width: 100%;
-  }
-}
-
 
 @media (max-width: 1200px) {
   .pg-grid {
@@ -284,52 +251,6 @@
 
 @media (max-width: 600px) {
   .pg-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-  }
-}
-
-@media (max-width: 768px) {
-  .pg-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 12px;
-  }
-}
-
-/* ===== 2 CARDS PERFECT FIT - MOBILE FIX ===== */
-@media (max-width: 768px) {
-
-  /* force true responsive grid */
-  .pg-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 12px;
-    padding: 15px 10px;
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  /* remove desktop width restrictions */
-  .pg-card {
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-    box-sizing: border-box;
-  }
-
-  /* keep image small */
-  .pg-image {
-    height: 120px !important;
-  }
-
-  .pg-image img {
-    width: 100%;
-    height: 120px !important;
-    object-fit: cover;
-  }
-
-  /* avoid hover bounce conflict */
-  .pg-card:hover {
-    transform: none !important;
+    grid-template-columns: 1fr;
   }
 }
