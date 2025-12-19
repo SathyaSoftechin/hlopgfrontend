@@ -387,6 +387,9 @@
   .city-header h2 {
     font-size: 18px;
   }
+  .hero {
+    height: 40vh;
+  }
 }
 
 /* --------- Tablet Landscape (992px) --------- */
@@ -394,12 +397,18 @@
   .city-header h2 {
     font-size: 18px;
   }
+  .hero {
+    height: 40vh;
+  }
 }
 
 /* --------- Tablet Portrait & Modern Mobiles (768px) --------- */
 @media (max-width: 768px) {
   .city-header h2 {
     font-size: 18px;
+  }
+  .hero {
+    height: 40vh;
   }
 }
 
@@ -410,10 +419,18 @@
 .city-header h2 {
     font-size: 18px;
   }
+
+  .hero {
+    height: 40vh;
+  }
 }
 
 @media (max-width: 480px) {
   .city-header h2 {
     font-size: 16px;
+  }
+
+  .hero {
+    height: 40vh;
   }
 }
