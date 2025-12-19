@@ -373,12 +373,47 @@
   mask-size: 100% 100%;
 }
 
+/* --------- Desktop (1200px) --------- */
+@media (max-width: 1200px) {
+  .city-header h2 {
+    font-size: 24px;
+  }
+}
+
+/* ==============================
+   📌 768px — Tablet Portrait
+=================================*/
+@media (max-width: 768px) {
+  .city-header h2 {
+    font-size: 18px;
+  }
+}
+
+/* --------- Tablet Landscape (992px) --------- */
+@media (max-width: 992px) {
+  .city-header h2 {
+    font-size: 18px;
+  }
+}
+
+/* --------- Tablet Portrait & Modern Mobiles (768px) --------- */
+@media (max-width: 768px) {
+  .city-header h2 {
+    font-size: 18px;
+  }
+}
+
 /* ==============================
    📌 600px — Mobile
 =================================*/
 @media (max-width: 600px) {
-
-  .city-header h2 {
+.city-header h2 {
     font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .city-header h2 {
+    font-size: 16px;
   }
 }
