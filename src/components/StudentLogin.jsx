@@ -10,7 +10,7 @@ const StudentLogin = () => {
   const location = useLocation();
   const redirectTo = location.state?.from || "/"; // fallback to home
   const [formData, setFormData] = useState({
-    email: "",
+    identifier: "",
     password: "",
   });
       const [error, setError] = useState(""); 
@@ -68,10 +68,10 @@ const StudentLogin = () => {
 
       <form className="student-login-form" onSubmit={handleSubmit}>
         <input
-          type="email"
-          name="email"
+          type="text"
+          name="identifier"
           placeholder="Email Address"
-          value={formData.email}
+          value={formData.identifier}
           onChange={handleChange}
           required
         />
