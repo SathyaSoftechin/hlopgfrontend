@@ -68,7 +68,7 @@ const StudentLogin = () => {
 
       <form className="student-login-form" onSubmit={handleSubmit}>
         <input
-          type="email"
+          type="text"
           name="identifier"
           placeholder="Email Address"
           value={formData.identifier}
