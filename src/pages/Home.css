@@ -466,27 +466,37 @@
 }
 
 /* ================= Close Button ================= */
+/* ===== FORCE FIX CLOSE BUTTON ===== */
 .popup-close {
   position: absolute;
   top: 14px;
   right: 16px;
-  background: #f2f2f2;
-  border-radius: 50%;
-  border: none;
   width: 32px;
   height: 32px;
-  cursor: pointer;
+  border-radius: 50%;
+  border: none;
+  background: #f2f2f2;
   font-size: 18px;
-  color: #000;
   display: grid;
   place-items: center;
-  transition: 0.2s;
+  cursor: pointer;
+
+  /* Lock layout */
+  line-height: 0;
+  box-sizing: border-box;
 }
 
 .popup-close:hover {
-  background: #ddd;
-  transform: scale(1.05);
+  /* STOP all movement */
+  transform: none !important;
+  translate: none !important;
+  scale: 1 !important;
+
+  /* Only visual effect */
+  background: #e5e5e5 !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
+
 
 /* ================= Icon ================= */
 .popup-app-img {

@@ -31,8 +31,8 @@ const Popup = ({ hostel = {}, onClose = () => {}, onContinue = () => {} }) => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [date, setDate] = useState(null);
   const [numDays, setNumDays] = useState("");
-  const [frontAadhar, setFrontAadhar] = useState(null);
-  const [backAadhar, setBackAadhar] = useState(null);
+  // const [frontAadhar, setFrontAadhar] = useState(null);
+  // const [backAadhar, setBackAadhar] = useState(null);
   const [mainImageIndex, setMainImageIndex] = useState(0);
   const [priceType, setPriceType] = useState("monthly");
   const [acceptedTerms, setAcceptedTerms] = useState(false);
@@ -63,8 +63,8 @@ const Popup = ({ hostel = {}, onClose = () => {}, onContinue = () => {} }) => {
       document.body.style.overflow = prev;
       window.removeEventListener("keydown", handleEsc);
       // revoke object urls if any
-      if (typeof frontAadhar === "string" && frontAadhar.startsWith("blob:")) URL.revokeObjectURL(frontAadhar);
-      if (typeof backAadhar === "string" && backAadhar.startsWith("blob:")) URL.revokeObjectURL(backAadhar);
+      // if (typeof frontAadhar === "string" && frontAadhar.startsWith("blob:")) URL.revokeObjectURL(frontAadhar);
+      // if (typeof backAadhar === "string" && backAadhar.startsWith("blob:")) URL.revokeObjectURL(backAadhar);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -83,12 +83,12 @@ const Popup = ({ hostel = {}, onClose = () => {}, onContinue = () => {} }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [priceType]);
 
-  const handleFileChange = (e, setter) => {
-    if (!e.target.files || !e.target.files[0]) return;
-    const file = e.target.files[0];
-    const url = URL.createObjectURL(file);
-    setter(url);
-  };
+  // const handleFileChange = (e, setter) => {
+  //   if (!e.target.files || !e.target.files[0]) return;
+  //   const file = e.target.files[0];
+  //   const url = URL.createObjectURL(file);
+  //   setter(url);
+  // };
 
   const baseRent = selectedOption ? Number(selectedOption.price || 0) : 0;
 
@@ -131,8 +131,8 @@ const Popup = ({ hostel = {}, onClose = () => {}, onContinue = () => {} }) => {
       rentAmount,
       totalAmount,
       deposit,
-      frontAadhar,
-      backAadhar,
+      // frontAadhar,
+      // backAadhar,
     };
     onContinue(bookingData);
   };
@@ -299,7 +299,7 @@ const Popup = ({ hostel = {}, onClose = () => {}, onContinue = () => {} }) => {
               </div>
             </div>
 
-            <div className="aadhar-section">
+            {/* <div className="aadhar-section">
               <label className="upload-box">
                 {frontAadhar ? (
                   <img src={frontAadhar} alt="Front Aadhaar" />
@@ -321,7 +321,7 @@ const Popup = ({ hostel = {}, onClose = () => {}, onContinue = () => {} }) => {
                   </>
                 )}
               </label>
-            </div>
+            </div> */}
 
             <div className="terms-checkbox">
               <input type="checkbox" id="terms" checked={acceptedTerms} onChange={(e) => setAcceptedTerms(e.target.checked)} />
