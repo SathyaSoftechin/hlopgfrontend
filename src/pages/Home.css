@@ -434,3 +434,139 @@
     height: 40vh;
   }
 }
+
+/* ================= Overlay ================= */
+.app-popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+}
+
+/* ================= Popup Card ================= */
+.app-popup-card {
+  width: 92%;
+  max-width: 520px;
+  background: #ffffff;
+  border-radius: 22px;
+  padding: 26px 28px;
+  text-align: center;
+  box-shadow: 0 35px 70px rgba(0, 0, 0, 0.35);
+  animation: popupScale 0.35s ease;
+  position: relative;
+
+  /* 👇 Clean tight spacing (no awkward empty space) */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ================= Close Button ================= */
+.popup-close {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  background: #f2f2f2;
+  border-radius: 50%;
+  border: none;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  font-size: 18px;
+  color: #000;
+  display: grid;
+  place-items: center;
+  transition: 0.2s;
+}
+
+.popup-close:hover {
+  background: #ddd;
+  transform: scale(1.05);
+}
+
+/* ================= Icon ================= */
+.popup-app-img {
+  width: 90px;
+  margin: 0 auto 4px auto;
+  opacity: 0.9;
+}
+
+/* ================= Title ================= */
+.app-popup-card h2 {
+  font-size: 22px;
+  font-weight: 800;
+  color: #111;
+  margin: 4px 0 2px 0;
+}
+
+/* ================= Subtitle ================= */
+.app-popup-card p {
+  color: #555;
+  font-size: 14px;
+  margin: 0;
+}
+
+/* ================= Buttons ================= */
+.popup-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  /* Prevent movement */
+  flex-wrap: nowrap;
+  width: fit-content;
+  margin: 10px auto 0 auto;
+  min-height: 50px;     /* Locks vertical space */
+}
+
+.popup-buttons img {
+  height: 50px;
+  width: auto;
+  display: block;
+  /* Avoid layout shift */
+  aspect-ratio: 3 / 1;
+}
+
+.popup-buttons img:hover {
+  transform: scale(1.06);
+}
+
+.brand-text {
+  color: #7556ff;
+}
+
+/* ================= Animation ================= */
+@keyframes popupScale {
+  from {
+    transform: translateY(20px) scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* ================= Mobile ================= */
+@media (max-width: 600px) {
+  .app-popup-card {
+    padding: 20px 18px;
+    border-radius: 18px;
+  }
+
+  .popup-buttons img {
+    height: 40px;
+  }
+
+  .app-popup-card h2 {
+    font-size: 19px;
+  }
+
+  .app-popup-card p {
+    font-size: 13px;
+  }
+}

@@ -18,6 +18,10 @@ import hyderabadBg from "../assets/hyderabad.png";
 import chennaiBg from "../assets/chennai.png";
 import mumbaiBg from "../assets/mumbai.png";
 import bangaloreBg from "../assets/bangalore.png";
+import logo from "../assets/logo.png";
+
+const PLAYSTORE_LINK = "https://play.google.com/";
+const APPSTORE_LINK = "https://www.apple.com/app-store/";
 
 function Home() {
   const navigate = useNavigate();
@@ -122,9 +126,54 @@ function Home() {
     Wash: <FaShower />,
   };
 
+  /* ---------------- APP DOWNLOAD POPUP ---------------- */
+  const [showPopup, setShowPopup] = useState(false);
+
+  useEffect(() => {
+  setTimeout(() => {
+    setShowPopup(true);
+    document.body.style.overflow = "hidden";
+  }, 5000);   // ⏳ popup after 5 seconds
+}, []);
+
+
   /* ---------------- Render ---------------- */
   return (
     <div className="home">
+
+      {/* ===== App Download Popup ===== */}
+      {showPopup && (
+        <div className="app-popup-overlay">
+          <div className="app-popup-card">
+
+            <button className="popup-close" onClick={() => setShowPopup(false)}>
+              ✕
+            </button>
+
+            <img
+              src={logo}
+              alt="logo"
+              className="popup-app-img"
+            />
+
+            <h2>Download Our <span class="brand-text">HLOPG</span> Mobile App</h2>
+            <p>Find hostels faster, easier & smarter with our app.</p>
+
+            <div className="popup-buttons">
+              <a href={PLAYSTORE_LINK} target="_blank" rel="noopener noreferrer">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" />
+              </a>
+
+              <a href={APPSTORE_LINK} target="_blank" rel="noopener noreferrer">
+                <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" />
+              </a>
+            </div>
+
+          </div>
+        </div>
+      )}
+
+      {/* ===== Hero Section ===== */}
       <div
         className="hero"
         style={{ backgroundImage: `url(${cities[currentBg].bg})` }}
@@ -137,6 +186,7 @@ function Home() {
         </div>
       </div>
 
+      {/* ===== City Sections ===== */}
       {cities.map((city, index) => {
         const cityRouteName =
           city.name.match(/in (\w+)/i)?.[1] || "unknown";
@@ -156,6 +206,7 @@ function Home() {
             </div>
 
             <div className="pg-container">
+              {/* Arrows */}
               <button
                 className={`arrow left ${
                   arrowVisibility[index]?.left ? "show" : "hide"
@@ -174,6 +225,7 @@ function Home() {
                 <FaChevronRight />
               </button>
 
+              {/* Scroll */}
               <div
                 className="pg-scroll"
                 ref={(el) => (pgRefs.current[index] = el)}
@@ -182,12 +234,9 @@ function Home() {
                 <div className="pg-track">
                   {city.pgList.map((pg) => (
                     <div key={pg.id} className="pg-card new-pg-card">
-                      {/* 🔑 Click handler moved INSIDE */}
                       <div
                         className="pg-card-click"
-                        onClick={() =>
-                          navigate(`/hostel/${pg.id}`)
-                        }
+                        onClick={() => navigate(`/hostel/${pg.id}`)}
                       >
                         <div className="pg-image new-img">
                           <img src={pg.img} alt={pg.name} />
@@ -206,16 +255,12 @@ function Home() {
                           </div>
 
                           <p className="pg-location new-location">
-                            <span className="mdi--location-radius"></span>
                             {pg.location}
                           </p>
 
                           <div className="facility-row">
                             {pg.facilities.map((f, i) => (
-                              <div
-                                className="facility-block"
-                                key={i}
-                              >
+                              <div className="facility-block" key={i}>
                                 {facilityIcons[f]}
                                 <span>{f}</span>
                               </div>
@@ -230,10 +275,10 @@ function Home() {
                           </div>
                         </div>
                       </div>
-                      {/* end pg-card-click */}
                     </div>
                   ))}
                 </div>
+
               </div>
             </div>
           </div>
