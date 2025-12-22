@@ -128,14 +128,32 @@ function Home() {
 
   /* ---------------- APP DOWNLOAD POPUP ---------------- */
   const [showPopup, setShowPopup] = useState(false);
+  const scrollPosRef = useRef(0);
 
   useEffect(() => {
-  setTimeout(() => {
-    setShowPopup(true);
-    document.body.style.overflow = "hidden";
-  }, 5000);   // ⏳ popup after 5 seconds
-}, []);
+    const timer = setTimeout(() => {
+      setShowPopup(true);
 
+      // Lock Scroll Properly
+      scrollPosRef.current = window.scrollY;
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollPosRef.current}px`;
+      document.body.style.width = "100%";
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const closePopup = () => {
+    setShowPopup(false);
+
+    // Restore Scroll Properly
+    const scrollY = scrollPosRef.current;
+    document.body.style.position = "";
+    document.body.style.top = "";
+    document.body.style.width = "";
+    window.scrollTo(0, scrollY);
+  };
 
   /* ---------------- Render ---------------- */
   return (
@@ -146,7 +164,7 @@ function Home() {
         <div className="app-popup-overlay">
           <div className="app-popup-card">
 
-            <button className="popup-close" onClick={() => setShowPopup(false)}>
+            <button className="popup-close" onClick={closePopup}>
               ✕
             </button>
 
@@ -156,7 +174,10 @@ function Home() {
               className="popup-app-img"
             />
 
-            <h2>Download Our <span class="brand-text">HLOPG</span> Mobile App</h2>
+            <h2>
+              Download Our <span className="brand-text">HLOPG</span> Mobile App
+            </h2>
+
             <p>Find hostels faster, easier & smarter with our app.</p>
 
             <div className="popup-buttons">
