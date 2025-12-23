@@ -1,15 +1,21 @@
 // src/pages/MyRooms.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./MyRooms.css";
 
-const STORAGE_KEY = "hlopg_myrooms_layout";
+const STORAGE_KEY = "hlopg_myrooms_v3";   // NEW safe storage key
 
 export default function MyRooms() {
-  // REMOVE HEADER + FOOTER FOR THIS PAGE
+  // Hide Header & Footer for this Page
   useEffect(() => {
     window.hideHeaderFooter = true;
     return () => (window.hideHeaderFooter = false);
   }, []);
+
+  const hasLoaded = useRef(false);
+
+  const saveLayout = (data) => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  };
 
   const [floors, setFloors] = useState([]);
   const [setupPopup, setSetupPopup] = useState(false);
@@ -29,31 +35,37 @@ export default function MyRooms() {
   const [activeFloorIndex, setActiveFloorIndex] = useState(null);
   const [activeRoomIndex, setActiveRoomIndex] = useState(null);
 
-  // 📌 Load saved layout from localStorage
+  // Load Saved Layout on Page Open (SAFE + RELIABLE)
   useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
+    if (hasLoaded.current) return;
+    hasLoaded.current = true;
 
-    if (saved) {
-      setFloors(JSON.parse(saved));
-      setSetupPopup(false);
-    } else {
-      setSetupPopup(true); // first-time setup
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+
+      if (saved) {
+        const parsed = JSON.parse(saved);
+
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setFloors(parsed);
+          setSetupPopup(false);
+          return;
+        }
+      }
+
+      setSetupPopup(true);
+    } catch (err) {
+      console.error("Failed to load layout", err);
+      setSetupPopup(true);
     }
   }, []);
 
-  // 📌 Save layout on every change
-  useEffect(() => {
-    if (floors.length > 0) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(floors));
-    }
-  }, [floors]);
-
-  // ➕ Generate layout
+  // Generate Hostel Layout
   const generateLayout = () => {
     const { floors, roomsPerFloor, sharing } = setupData;
 
     if (!floors || !roomsPerFloor || !sharing)
-      return alert("Please fill all fields");
+      return alert("Please fill all the fields");
 
     const numFloors = Number(floors);
     const numRooms = Number(roomsPerFloor);
@@ -68,19 +80,21 @@ export default function MyRooms() {
     }));
 
     setFloors(newFloors);
+    saveLayout(newFloors);     // SAVE IMMEDIATELY
     setSetupPopup(false);
   };
 
-  // Toggle bed status
+  // Toggle Bed Filling
   const toggleBed = (floorIndex, roomIndex, bedIndex) => {
     const updated = [...floors];
     updated[floorIndex].rooms[roomIndex].beds[bedIndex] =
       !updated[floorIndex].rooms[roomIndex].beds[bedIndex];
 
     setFloors(updated);
+    saveLayout(updated);
   };
 
-  // ➕ Add Floor
+  // Add Floor
   const addFloor = () => {
     const newFloorNum = floors.length + 1;
 
@@ -89,10 +103,12 @@ export default function MyRooms() {
       rooms: [],
     };
 
-    setFloors([...floors, newFloor]);
+    const updated = [...floors, newFloor];
+    setFloors(updated);
+    saveLayout(updated);
   };
 
-  // ➕ Add/Edit Popup Logic
+  // Open Add/Edit Popup
   const openPopup = (mode, floorIndex, roomIndex = null) => {
     setPopupMode(mode);
     setActiveFloorIndex(floorIndex);
@@ -117,11 +133,11 @@ export default function MyRooms() {
     setTimeout(() => setShowPopup(false), 200);
   };
 
-  // SAVE ROOM
+  // Save Room
   const saveRoom = () => {
     const { roomNo, sharing } = popupData;
 
-    if (!roomNo || !sharing) return alert("Fill all fields");
+    if (!roomNo || !sharing) return alert("Please fill all fields");
 
     const newBeds = Array(Math.min(6, Math.max(1, Number(sharing)))).fill(false);
 
@@ -130,10 +146,14 @@ export default function MyRooms() {
     if (popupMode === "add") {
       updated[activeFloorIndex].rooms.push({ roomNo, beds: newBeds });
     } else {
-      updated[activeFloorIndex].rooms[activeRoomIndex] = { roomNo, beds: newBeds };
+      updated[activeFloorIndex].rooms[activeRoomIndex] = {
+        roomNo,
+        beds: newBeds,
+      };
     }
 
     setFloors(updated);
+    saveLayout(updated);
     closePopup();
   };
 
@@ -149,7 +169,7 @@ export default function MyRooms() {
         )}
       </div>
 
-      {/* Render Floors */}
+      {/* Floors */}
       {floors.map((floor, floorIndex) => (
         <div key={floorIndex} className="floor-section">
           <div className="floor-title">
@@ -231,7 +251,10 @@ export default function MyRooms() {
               type="number"
               value={setupData.roomsPerFloor}
               onChange={(e) =>
-                setSetupData({ ...setupData, roomsPerFloor: e.target.value })
+                setSetupData({
+                  ...setupData,
+                  roomsPerFloor: e.target.value,
+                })
               }
             />
 
@@ -251,10 +274,14 @@ export default function MyRooms() {
         </div>
       )}
 
-      {/* ADD/EDIT ROOM POPUP */}
+      {/* ADD / EDIT ROOM POPUP */}
       {showPopup && (
         <div className={`popup-overlay ${popupVisible ? "show" : "hide"}`}>
-          <div className={`popup-content ${popupVisible ? "popup-in" : "popup-out"}`}>
+          <div
+            className={`popup-content ${
+              popupVisible ? "popup-in" : "popup-out"
+            }`}
+          >
             <h3>{popupMode === "add" ? "Add Room" : "Edit Room"}</h3>
 
             <label>Room Number</label>

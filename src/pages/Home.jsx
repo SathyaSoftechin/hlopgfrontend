@@ -68,6 +68,7 @@ function Home() {
               location: h.area || h.city || "Unknown",
               rating: h.rating || 4.5,
               price: `₹${h.price || 5000}`,
+              fullHostelData: h,
               facilities: ["Beds", "Food", "Clean", "Wash"],
             })),
           };
@@ -126,6 +127,35 @@ function Home() {
     Wash: <FaShower />,
   };
 
+  /* ----------------❤️ LIKED PG SYSTEM ---------------- */
+  const [likedPg, setLikedPg] = useState([]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("likedPGs");
+    if (saved) {
+      try {
+        setLikedPg(JSON.parse(saved));
+      } catch {
+        setLikedPg([]);
+      }
+    }
+  }, []);
+
+  const toggleLike = (pg) => {
+    setLikedPg((prev) => {
+      let updated;
+
+      if (prev.find((p) => p.id === pg.id)) {
+        updated = prev.filter((p) => p.id !== pg.id);
+      } else {
+        updated = [...prev, pg];
+      }
+
+      localStorage.setItem("likedPGs", JSON.stringify(updated));
+      return updated;
+    });
+  };
+
   /* ---------------- APP DOWNLOAD POPUP ---------------- */
   const [showPopup, setShowPopup] = useState(false);
   const scrollPosRef = useRef(0);
@@ -134,7 +164,6 @@ function Home() {
     const timer = setTimeout(() => {
       setShowPopup(true);
 
-      // Lock Scroll Properly
       scrollPosRef.current = window.scrollY;
       document.body.style.position = "fixed";
       document.body.style.top = `-${scrollPosRef.current}px`;
@@ -147,7 +176,6 @@ function Home() {
   const closePopup = () => {
     setShowPopup(false);
 
-    // Restore Scroll Properly
     const scrollY = scrollPosRef.current;
     document.body.style.position = "";
     document.body.style.top = "";
@@ -163,16 +191,11 @@ function Home() {
       {showPopup && (
         <div className="app-popup-overlay">
           <div className="app-popup-card">
-
             <button className="popup-close" onClick={closePopup}>
               ✕
             </button>
 
-            <img
-              src={logo}
-              alt="logo"
-              className="popup-app-img"
-            />
+            <img src={logo} alt="logo" className="popup-app-img" />
 
             <h2>
               Download Our <span className="brand-text">HLOPG</span> Mobile App
@@ -189,7 +212,6 @@ function Home() {
                 <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" />
               </a>
             </div>
-
           </div>
         </div>
       )}
@@ -261,7 +283,19 @@ function Home() {
                       >
                         <div className="pg-image new-img">
                           <img src={pg.img} alt={pg.name} />
-                          <FaHeart className="wishlist" />
+
+                          {/* ❤️ Heart Icon */}
+                          <FaHeart
+                            className={`wishlist ${
+                              likedPg.find((p) => p.id === pg.id)
+                                ? "liked"
+                                : "unliked"
+                            }`}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleLike(pg);
+                            }}
+                          />
                         </div>
 
                         <div className="pg-details new-details">

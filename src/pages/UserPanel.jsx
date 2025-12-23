@@ -189,7 +189,7 @@ const UserPanel = ({ onSave, onLogout }) => {
                   </div>
                 ))}
 
-                <div className="aadhaar-section">
+                {/* <div className="aadhaar-section">
                   <label>Aadhaar</label>
                   <div className="aadhaar-boxes">
                     {["aadhaarFront", "aadhaarBack"].map((side) => (
@@ -208,7 +208,7 @@ const UserPanel = ({ onSave, onLogout }) => {
                       </div>
                     ))}
                   </div>
-                </div>
+                </div> */}
 
                 <button className="save-btn" onClick={handleSaveChanges}>Save Changes</button>
                 {message && <p className="save-message">{message}</p>}

@@ -580,3 +580,21 @@
     font-size: 13px;
   }
 }
+
+.wishlist {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 22px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.wishlist.unliked {
+  color: rgba(255,255,255,0.6);
+}
+
+.wishlist.liked {
+  color: #ff2b4d;
+  transform: scale(1.1);
+}

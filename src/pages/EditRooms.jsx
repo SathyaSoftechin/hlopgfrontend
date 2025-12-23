@@ -1,181 +1,321 @@
-// src/pages/EditRooms.jsx
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import api from "../api";
-import "./EditRooms.css";
+// src/pages/MyRooms.jsx
+import React, { useState, useEffect, useRef } from "react";
+import "./MyRooms.css";
 
-const EditRooms = () => {
-  const { hostel_id } = useParams();
+const STORAGE_KEY = "hlopg_myrooms_v3";   // NEW safe storage key
 
-  const [floors, setFloors] = useState({});
-  const [loading, setLoading] = useState(true);
-
-  // ✅ Load rooms grouped by floor
-  const loadRooms = async () => {
-    setLoading(true);
-    try {
-      const res = await api.get(`/rooms/${hostel_id}`);
-      const grouped = {};
-      res.data.forEach((room) => {
-        if (!grouped[room.floor]) grouped[room.floor] = [];
-        grouped[room.floor].push(room);
-      });
-      setFloors(grouped);
-    } catch (err) {
-      console.error("Error fetching rooms:", err);
-      setFloors({});
-    } finally {
-      setLoading(false);
-    }
-  };
-
+export default function MyRooms() {
+  // Hide Header & Footer for this Page
   useEffect(() => {
-    loadRooms();
-  }, [hostel_id]);
+    window.hideHeaderFooter = true;
+    return () => (window.hideHeaderFooter = false);
+  }, []);
 
-  // Add new floor
-  const addFloor = () => {
-    const newFloor = Object.keys(floors).length + 1;
-    setFloors({ ...floors, [newFloor]: [] });
+  const hasLoaded = useRef(false);
+
+  const saveLayout = (data) => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   };
 
-  // Delete floor
-  const deleteFloor = (floor) => {
-    const updated = { ...floors };
-    delete updated[floor];
-    setFloors(updated);
-  };
+  const [floors, setFloors] = useState([]);
+  const [setupPopup, setSetupPopup] = useState(false);
 
-  // Add room in a floor
-  const addRoom = (floor) => {
-    const count = floors[floor].length + 1;
-    const newRoom = {
-      room_id: null,
-      hostel_id,
-      floor,
-      room_number: `${floor}0${count}`,
-      sharing: 3,
-      status: "available",
-      price: 5000,
-    };
-    setFloors({
-      ...floors,
-      [floor]: [...floors[floor], newRoom],
-    });
-  };
+  const [setupData, setSetupData] = useState({
+    floors: "",
+    roomsPerFloor: "",
+    sharing: "",
+  });
 
-  // Delete room
-  const deleteRoom = (floor, index) => {
-    const updated = [...floors[floor]];
-    updated.splice(index, 1);
-    setFloors({ ...floors, [floor]: updated });
-  };
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupVisible, setPopupVisible] = useState(false);
 
-  // Update any field
-  const updateField = (floor, index, field, value) => {
-    const updated = [...floors[floor]];
-    updated[index][field] = value;
-    setFloors({ ...floors, [floor]: updated });
-  };
+  const [popupMode, setPopupMode] = useState("add");
+  const [popupData, setPopupData] = useState({ roomNo: "", sharing: "" });
 
-  // Save all rooms (update existing and create new)
-  const handleSave = async () => {
-    const allRooms = [];
-    Object.keys(floors).forEach((floor) => {
-      floors[floor].forEach((room) => {
-        allRooms.push(room);
-      });
-    });
+  const [activeFloorIndex, setActiveFloorIndex] = useState(null);
+  const [activeRoomIndex, setActiveRoomIndex] = useState(null);
+
+  // Load Saved Layout on Page Open (SAFE + RELIABLE)
+  useEffect(() => {
+    if (hasLoaded.current) return;
+    hasLoaded.current = true;
 
     try {
-      await api.put(`/rooms/save/${hostel_id}`, { rooms: allRooms });
-      alert("Rooms saved successfully!");
-      await loadRooms(); // reload updated rooms from backend
+      const saved = localStorage.getItem(STORAGE_KEY);
+
+      if (saved) {
+        const parsed = JSON.parse(saved);
+
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setFloors(parsed);
+          setSetupPopup(false);
+          return;
+        }
+      }
+
+      setSetupPopup(true);
     } catch (err) {
-      console.error("Error saving rooms:", err);
-      alert("Error saving rooms");
+      console.error("Failed to load layout", err);
+      setSetupPopup(true);
     }
+  }, []);
+
+  // Generate Hostel Layout
+  const generateLayout = () => {
+    const { floors, roomsPerFloor, sharing } = setupData;
+
+    if (!floors || !roomsPerFloor || !sharing)
+      return alert("Please fill all the fields");
+
+    const numFloors = Number(floors);
+    const numRooms = Number(roomsPerFloor);
+    const numSharing = Number(sharing);
+
+    const newFloors = Array.from({ length: numFloors }, (_, floorIndex) => ({
+      floor: `${floorIndex + 1}${["st", "nd", "rd"][floorIndex] || "th"} Floor`,
+      rooms: Array.from({ length: numRooms }, (_, roomIndex) => ({
+        roomNo: `${floorIndex + 1}${String(roomIndex + 1).padStart(2, "0")}`,
+        beds: Array(numSharing).fill(false),
+      })),
+    }));
+
+    setFloors(newFloors);
+    saveLayout(newFloors);     // SAVE IMMEDIATELY
+    setSetupPopup(false);
   };
 
-  if (loading) return <p>Loading rooms...</p>;
+  // Toggle Bed Filling
+  const toggleBed = (floorIndex, roomIndex, bedIndex) => {
+    const updated = [...floors];
+    updated[floorIndex].rooms[roomIndex].beds[bedIndex] =
+      !updated[floorIndex].rooms[roomIndex].beds[bedIndex];
+
+    setFloors(updated);
+    saveLayout(updated);
+  };
+
+  // Add Floor
+  const addFloor = () => {
+    const newFloorNum = floors.length + 1;
+
+    const newFloor = {
+      floor: `${newFloorNum}${["st", "nd", "rd"][newFloorNum - 1] || "th"} Floor`,
+      rooms: [],
+    };
+
+    const updated = [...floors, newFloor];
+    setFloors(updated);
+    saveLayout(updated);
+  };
+
+  // Open Add/Edit Popup
+  const openPopup = (mode, floorIndex, roomIndex = null) => {
+    setPopupMode(mode);
+    setActiveFloorIndex(floorIndex);
+    setActiveRoomIndex(roomIndex);
+
+    if (mode === "edit") {
+      const room = floors[floorIndex].rooms[roomIndex];
+      setPopupData({
+        roomNo: room.roomNo,
+        sharing: room.beds.length.toString(),
+      });
+    } else {
+      setPopupData({ roomNo: "", sharing: "" });
+    }
+
+    setShowPopup(true);
+    setTimeout(() => setPopupVisible(true), 20);
+  };
+
+  const closePopup = () => {
+    setPopupVisible(false);
+    setTimeout(() => setShowPopup(false), 200);
+  };
+
+  // Save Room
+  const saveRoom = () => {
+    const { roomNo, sharing } = popupData;
+
+    if (!roomNo || !sharing) return alert("Please fill all fields");
+
+    const newBeds = Array(Math.min(6, Math.max(1, Number(sharing)))).fill(false);
+
+    const updated = [...floors];
+
+    if (popupMode === "add") {
+      updated[activeFloorIndex].rooms.push({ roomNo, beds: newBeds });
+    } else {
+      updated[activeFloorIndex].rooms[activeRoomIndex] = {
+        roomNo,
+        beds: newBeds,
+      };
+    }
+
+    setFloors(updated);
+    saveLayout(updated);
+    closePopup();
+  };
 
   return (
-    <div className="edit-rooms-page">
-      <h2></h2>
+    <div className="myrooms-container">
+      <div className="myrooms-header">
+        <h2>My Rooms</h2>
 
-      <button className="add-floor-btn" onClick={addFloor}>
-        
-      </button>
+        {floors.length > 0 && (
+          <button className="add-floor-btn" onClick={addFloor}>
+            + Add Floor
+          </button>
+        )}
+      </div>
 
-      {Object.keys(floors).map((floor) => (
-        <div key={floor} className="floor-block">
-          <div className="floor-header">
-            <h3>Floor {floor}</h3>
+      {/* Floors */}
+      {floors.map((floor, floorIndex) => (
+        <div key={floorIndex} className="floor-section">
+          <div className="floor-title">
+            <h3>{floor.floor}</h3>
 
-            <div className="floor-actions">
-              <button onClick={() => addRoom(floor)}>+ Add Room</button>
-              <button className="delete-floor" onClick={() => deleteFloor(floor)}>
-                Delete Floor
-              </button>
-            </div>
+            <button
+              className="add-room-btn"
+              onClick={() => openPopup("add", floorIndex)}
+            >
+              + Add Room
+            </button>
           </div>
 
           <div className="rooms-container">
-            {floors[floor].map((room, index) => (
-              <div className="room-card" key={index}>
-                <p>Room No: {room.room_number}</p>
+            {floor.rooms.map((room, roomIndex) => (
+              <div key={roomIndex} className="room-card">
+                <div className="room-header">
+                  <h4>{room.roomNo}</h4>
 
-                <label>
-                  Sharing:
-                  <input
-                    type="number"
-                    value={room.sharing}
-                    onChange={(e) =>
-                      updateField(floor, index, "sharing", parseInt(e.target.value))
-                    }
-                  />
-                </label>
-
-                <label>
-                  Price:
-                  <input
-                    type="number"
-                    value={room.price}
-                    onChange={(e) =>
-                      updateField(floor, index, "price", parseFloat(e.target.value))
-                    }
-                  />
-                </label>
-
-                <label>
-                  Status:
-                  <select
-                    value={room.status}
-                    onChange={(e) => updateField(floor, index, "status", e.target.value)}
+                  <button
+                    className="edit-btn"
+                    onClick={() => openPopup("edit", floorIndex, roomIndex)}
                   >
-                    <option value="available">Available</option>
-                    <option value="occupied">Occupied</option>
-                    <option value="maintenance">Maintenance</option>
-                  </select>
-                </label>
+                    Edit
+                  </button>
+                </div>
 
-                <button
-                  className="delete-room"
-                  onClick={() => deleteRoom(floor, index)}
-                >
-                  Delete Room
-                </button>
+                <div className="room-image">
+                  <img
+                    src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=500&q=80"
+                    alt="Room"
+                  />
+
+                  <div
+                    className="beds-grid"
+                    style={{
+                      gridTemplateColumns:
+                        room.beds.length <= 2
+                          ? "repeat(2, 1fr)"
+                          : room.beds.length <= 4
+                          ? "repeat(2, 1fr)"
+                          : "repeat(3, 1fr)",
+                    }}
+                  >
+                    {room.beds.map((filled, bedIndex) => (
+                      <div
+                        key={bedIndex}
+                        className={`bed ${filled ? "filled" : "empty"}`}
+                        onClick={() =>
+                          toggleBed(floorIndex, roomIndex, bedIndex)
+                        }
+                      ></div>
+                    ))}
+                  </div>
+                </div>
               </div>
             ))}
           </div>
         </div>
       ))}
 
-      <button className="save-btn" onClick={handleSave}>
-        Save All Rooms
-      </button>
+      {/* INITIAL SETUP POPUP */}
+      {setupPopup && (
+        <div className="popup-overlay show">
+          <div className="popup-content popup-in">
+            <h3>Setup Hostel Layout</h3>
+
+            <label>Floors</label>
+            <input
+              type="number"
+              value={setupData.floors}
+              onChange={(e) =>
+                setSetupData({ ...setupData, floors: e.target.value })
+              }
+            />
+
+            <label>Rooms per Floor</label>
+            <input
+              type="number"
+              value={setupData.roomsPerFloor}
+              onChange={(e) =>
+                setSetupData({
+                  ...setupData,
+                  roomsPerFloor: e.target.value,
+                })
+              }
+            />
+
+            <label>Sharing per Room</label>
+            <input
+              type="number"
+              value={setupData.sharing}
+              onChange={(e) =>
+                setSetupData({ ...setupData, sharing: e.target.value })
+              }
+            />
+
+            <button className="save-btn" onClick={generateLayout}>
+              Generate
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ADD / EDIT ROOM POPUP */}
+      {showPopup && (
+        <div className={`popup-overlay ${popupVisible ? "show" : "hide"}`}>
+          <div
+            className={`popup-content ${
+              popupVisible ? "popup-in" : "popup-out"
+            }`}
+          >
+            <h3>{popupMode === "add" ? "Add Room" : "Edit Room"}</h3>
+
+            <label>Room Number</label>
+            <input
+              type="text"
+              value={popupData.roomNo}
+              onChange={(e) =>
+                setPopupData({ ...popupData, roomNo: e.target.value })
+              }
+            />
+
+            <label>Sharing</label>
+            <input
+              type="number"
+              min="1"
+              max="6"
+              value={popupData.sharing}
+              onChange={(e) =>
+                setPopupData({ ...popupData, sharing: e.target.value })
+              }
+            />
+
+            <div className="popup-buttons">
+              <button className="cancel-btn" onClick={closePopup}>
+                Cancel
+              </button>
+
+              <button className="save-btn" onClick={saveRoom}>
+                {popupMode === "add" ? "Add" : "Update"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
-};
-
-export default EditRooms;
+}
