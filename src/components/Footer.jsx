@@ -74,7 +74,7 @@ const Footer = () => {
               rel="noopener noreferrer"
               className="store-btn"
             >
-              <FaApple /> Download on the <strong>Apple App Store</strong>
+              <FaApple /> Download on the <strong>Apple Store</strong>
             </a>
           </div>
           <p className="store-text">

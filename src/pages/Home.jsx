@@ -160,33 +160,29 @@ function Home() {
   const [showPopup, setShowPopup] = useState(false);
   const scrollPosRef = useRef(0);
 
+  /* Show popup after 5s */
   useEffect(() => {
     const timer = setTimeout(() => {
-      setShowPopup(true);
-
       scrollPosRef.current = window.scrollY;
-      document.body.style.position = "fixed";
-      document.body.style.top = `-${scrollPosRef.current}px`;
-      document.body.style.width = "100%";
+
+      document.body.classList.add("no-scroll");
+      setShowPopup(true);
     }, 5000);
 
     return () => clearTimeout(timer);
   }, []);
 
+  /* Close popup */
   const closePopup = () => {
     setShowPopup(false);
 
-    const scrollY = scrollPosRef.current;
-    document.body.style.position = "";
-    document.body.style.top = "";
-    document.body.style.width = "";
-    window.scrollTo(0, scrollY);
+    document.body.classList.remove("no-scroll");
+    window.scrollTo(0, scrollPosRef.current);
   };
 
   /* ---------------- Render ---------------- */
   return (
     <div className="home">
-
       {/* ===== App Download Popup ===== */}
       {showPopup && (
         <div className="app-popup-overlay">
@@ -204,7 +200,11 @@ function Home() {
             <p>Find hostels faster, easier & smarter with our app.</p>
 
             <div className="popup-buttons">
-              <a href={PLAYSTORE_LINK} target="_blank" rel="noopener noreferrer">
+              <a
+                href={PLAYSTORE_LINK}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" />
               </a>
 
@@ -231,8 +231,7 @@ function Home() {
 
       {/* ===== City Sections ===== */}
       {cities.map((city, index) => {
-        const cityRouteName =
-          city.name.match(/in (\w+)/i)?.[1] || "unknown";
+        const cityRouteName = city.name.match(/in (\w+)/i)?.[1] || "unknown";
 
         return (
           <div key={index} className="city-section">
@@ -240,9 +239,7 @@ function Home() {
               <h2>{city.name}</h2>
               <div
                 className="know-more-btn"
-                onClick={() =>
-                  navigate(`/city/${cityRouteName.toLowerCase()}`)
-                }
+                onClick={() => navigate(`/city/${cityRouteName.toLowerCase()}`)}
               >
                 See More...
               </div>
@@ -300,9 +297,7 @@ function Home() {
 
                         <div className="pg-details new-details">
                           <div className="pg-header new-header">
-                            <h3 className="pg-name new-name">
-                              {pg.name}
-                            </h3>
+                            <h3 className="pg-name new-name">{pg.name}</h3>
                             <div className="pg-rating new-rating">
                               <FaStar className="star" />
                               <span>{pg.rating}</span>
@@ -310,6 +305,7 @@ function Home() {
                           </div>
 
                           <p className="pg-location new-location">
+                            <span class="gridicons--location"></span>
                             {pg.location}
                           </p>
 
@@ -333,7 +329,6 @@ function Home() {
                     </div>
                   ))}
                 </div>
-
               </div>
             </div>
           </div>

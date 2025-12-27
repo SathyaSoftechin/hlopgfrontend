@@ -1,0 +1,68 @@
+:root {
+  --font-primary: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial;
+
+  /* Weights */
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+
+  /* Sizes */
+  --fs-h1: 32px;
+  --fs-h2: 24px;
+  --fs-body-22: 22px;
+  --fs-body-24: 24px;
+  --fs-body-32: 32px;
+  --fs-body-36: 36px;
+  --fs-para: 18px;
+}
+
+html, body {
+  font-family: var(--font-primary);
+  margin: 0;
+  padding: 0;
+  color: #000;
+}
+
+* {
+  font-family: inherit;
+}
+
+/* Headings */
+.h-heading {
+  font-size: var(--fs-h1);
+  font-weight: var(--fw-semibold);
+}
+
+.h-subheading {
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-medium);
+}
+
+/* Body Styles */
+.body-regular-22 {
+  font-size: var(--fs-body-22);
+  font-weight: var(--fw-regular);
+}
+
+.body-medium-24 {
+  font-size: var(--fs-body-24);
+  font-weight: var(--fw-medium);
+}
+
+.body-semibold-32 {
+  font-size: var(--fs-body-32);
+  font-weight: var(--fw-semibold);
+}
+
+.body-bold-36 {
+  font-size: var(--fs-body-36);
+  font-weight: var(--fw-bold);
+}
+
+/* Paragraph */
+.p-regular {
+  font-size: var(--fs-para);
+  font-weight: var(--fw-regular);
+  line-height: 1.6;
+}

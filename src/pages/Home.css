@@ -1,5 +1,21 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 
+html, body {
+  margin: 0;
+  padding: 0;
+  height: auto !important;
+  overflow-x: hidden;
+  overflow-y: auto !important;
+}
+
+/* Lock scroll when popup open */
+body.no-scroll {
+  position: fixed;
+  width: 100%;
+  overflow: hidden !important;
+}
+
+
 /* ================= Base ================= */
 .home {
   font-family: "Inter", sans-serif;
@@ -207,11 +223,17 @@
   margin-top: -14px !important;
   font-size: 20px;
   color: #777;
+  gap: 0.25px !important;
 }
 
-.pg-icons-line {
-  margin: 4px 0 !important;
-  gap: 10px !important;
+.gridicons--location {
+  margin-left: 5px;
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23f50000' d='M19 9A7 7 0 1 0 5 9c0 1.387.409 2.677 1.105 3.765h-.008L12 22l5.903-9.235h-.007A6.97 6.97 0 0 0 19 9m-7 3a3 3 0 1 1 0-6a3 3 0 0 1 0 6'/%3E%3C/svg%3E");
 }
 
 /* ================= Facilities (NEW Style) ================= */
@@ -302,7 +324,7 @@
 }
 
 .arrow.left {
-  left: -30px;
+  left: 0px;
 }
 .arrow.right {
   right: 0px;
