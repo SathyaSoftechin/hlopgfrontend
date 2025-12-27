@@ -127,34 +127,58 @@ function Home() {
     Wash: <FaShower />,
   };
 
-  /* ----------------❤️ LIKED PG SYSTEM ---------------- */
-  const [likedPg, setLikedPg] = useState([]);
+  // /* ----------------❤️ LIKED PG SYSTEM ---------------- */
+  // const [likedPg, setLikedPg] = useState([]);
+
+  // useEffect(() => {
+  //   const saved = localStorage.getItem("likedPGs");
+  //   if (saved) {
+  //     try {
+  //       setLikedPg(JSON.parse(saved));
+  //     } catch {
+  //       setLikedPg([]);
+  //     }
+  //   }
+  // }, []);
+
+  // const toggleLike = (pg) => {
+  //   setLikedPg((prev) => {
+  //     let updated;
+
+  //     if (prev.find((p) => p.id === pg.id)) {
+  //       updated = prev.filter((p) => p.id !== pg.id);
+  //     } else {
+  //       updated = [...prev, pg];
+  //     }
+
+  //     localStorage.setItem("likedPGs", JSON.stringify(updated));
+  //     return updated;
+  //   });
+  // };
+
+
+const [likedPgIds, setLikedPgIds] = useState([]);
 
   useEffect(() => {
-    const saved = localStorage.getItem("likedPGs");
-    if (saved) {
-      try {
-        setLikedPg(JSON.parse(saved));
-      } catch {
-        setLikedPg([]);
-      }
-    }
-  }, []);
-
-  const toggleLike = (pg) => {
-    setLikedPg((prev) => {
-      let updated;
-
-      if (prev.find((p) => p.id === pg.id)) {
-        updated = prev.filter((p) => p.id !== pg.id);
-      } else {
-        updated = [...prev, pg];
-      }
-
-      localStorage.setItem("likedPGs", JSON.stringify(updated));
-      return updated;
-    });
+  const fetchLiked = async () => {
+    const res = await api.get("/liked-hostels");
+    setLikedPgIds(res.data.map(pg => pg.hostel_id));
   };
+  fetchLiked();
+}, []);
+
+
+const toggleLike = async (pg) => {
+  const res = await api.post("/like-hostel", {
+    hostel_id: pg.id,
+  });
+
+  setLikedPgIds(prev =>
+    res.data.liked
+      ? [...prev, pg.id]
+      : prev.filter(id => id !== pg.id)
+  );
+};
 
   /* ---------------- APP DOWNLOAD POPUP ---------------- */
   const [showPopup, setShowPopup] = useState(false);
@@ -282,17 +306,15 @@ function Home() {
                           <img src={pg.img} alt={pg.name} />
 
                           {/* ❤️ Heart Icon */}
-                          <FaHeart
-                            className={`wishlist ${
-                              likedPg.find((p) => p.id === pg.id)
-                                ? "liked"
-                                : "unliked"
-                            }`}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              toggleLike(pg);
-                            }}
-                          />
+                      <FaHeart
+                        className={`wishlist ${
+                          likedPgIds.includes(pg.id) ? "liked" : "unliked"
+                        }`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleLike(pg);
+                        }}
+                      />
                         </div>
 
                         <div className="pg-details new-details">
