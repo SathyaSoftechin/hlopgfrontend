@@ -63,10 +63,10 @@ const OwnerLogin = () => {
 
         <form className="owner-login-form" onSubmit={handleSubmit}>
           <input
-            type="email"
-            name="email"
+            type="text"
+            name="identifier"
             placeholder="Email Address"
-            value={formData.email}
+            value={formData.identifier}
             onChange={handleChange}
             required
           />
