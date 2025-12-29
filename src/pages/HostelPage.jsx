@@ -161,7 +161,7 @@ const HostelPage = () => {
       deposit,
       totalAmount,
     };
-const token = localStorage.getItem("token");
+const token = localStorage.getItem("hlopgToken");
 
       const res = await api.post("/booking/newbooking", payload, {
           headers: { Authorization: `Bearer ${token}` }  }
