@@ -122,12 +122,16 @@ const Popup = ({ hostel = {}, onClose = () => {}, onContinue = () => {} }) => {
 
   const handleProceed = () => {
     if (!isPayEnabled) return;
+    const finalNumDays =
+    priceType === "daily"
+      ? Number(numDays)
+      : 30; // ✅ monthly default (required by backend)
     const bookingData = {
       sharing: selectedOption?.sharing,
       priceType,
-      numDays: priceType === "daily" ? Number(numDays) : undefined,
+      numDays: finalNumDays,
       months: priceType === "monthly" ? 1 : undefined,
-      date,
+      date: date.toISOString().split("T")[0], // ✅ DATEONLY format,
       rentAmount,
       totalAmount,
       deposit,

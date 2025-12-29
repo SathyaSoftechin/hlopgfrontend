@@ -161,7 +161,7 @@ const [likedPgIds, setLikedPgIds] = useState([]);
 
   useEffect(() => {
   const fetchLiked = async () => {
-    const res = await api.get("/hostel/liked-hostels");
+    const res = await api.get("/hostel/liked-hostels", );
     setLikedPgIds(res.data.map(pg => pg.hostel_id));
   };
   fetchLiked();
