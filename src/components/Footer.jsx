@@ -94,9 +94,9 @@ const Footer = () => {
           <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
             <FaXTwitter />
           </a>
-          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
+          {/* <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
             <FaLinkedinIn />
-          </a>
+          </a> */}
         </div>
       </div>
 
