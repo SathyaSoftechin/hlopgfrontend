@@ -128,16 +128,44 @@ const HostelPage = () => {
         alert("User not authenticated");
         return;
       }
+      const {
+      sharing,
+      priceType,
+      numDays,
+      date,
+      rentAmount,
+      deposit,
+      totalAmount,
+    } = data;
 
-      const payload = {
-        userId,
-        hostelId,
-        hostelName: hostelData?.hostel_name,
-        address: hostelData?.address,
-        ...data,
-      };
+     if (
+      !sharing ||
+      !priceType ||
+      !numDays ||
+      !date ||
+      !rentAmount ||
+      totalAmount == null
+    ) {
+      alert("Please fill all booking details");
+      return;
+    }
 
-      const res = await api.post("/booking/newbooking", payload);
+     const payload = {
+      userId,
+      hostelId,
+      sharing,
+      priceType,
+      numDays,
+      date,
+      rentAmount,
+      deposit,
+      totalAmount,
+    };
+const token = localStorage.getItem("hlopgToken");
+
+      const res = await api.post("/booking/newbooking", payload, {
+          headers: { Authorization: `Bearer ${token}` }  }
+ );
 
       if (res.data.success) {
         alert(`Booking Successful! Booking ID: ${res.data.bookingId}`);
