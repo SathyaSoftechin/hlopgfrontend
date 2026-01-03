@@ -44,15 +44,6 @@ const Contact = () => {
             <FaXTwitter />
           </a>
 
-          {/* LinkedIn */}
-          <a
-            href="https://www.linkedin.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="linkedin"
-          >
-            <FaLinkedinIn />
-          </a>
         </div>
       </section>
 

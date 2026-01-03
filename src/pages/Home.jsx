@@ -243,7 +243,7 @@ const toggleLike = async (pg) => {
       {/* ===== Hero Section ===== */}
       <div
         className="hero"
-        style={{ backgroundImage: `url(${cities[currentBg].bg})` }}
+        // style={{ backgroundImage: `url(${cities[currentBg].bg})` }}
       >
         <div className="overlay">
           <h1 className="title">HloPG</h1>
