@@ -267,7 +267,7 @@ const UploadPG = ({ user }) => {
   // ================== handleSubmit ==================
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!pgName || !pgInfo || !selectedPgType) {
+    if (!pgName || !pgInfo || !selectedPgType ) {
       alert("Please fill all required fields before saving.");
       return;
     }
@@ -290,8 +290,7 @@ const UploadPG = ({ user }) => {
       formData.append("sharing", JSON.stringify(buildSharingObject()));
 
       // owner (use fetched owner or ownerId from props)
-      formData.append("ownerId", owner || ownerId);
-
+ 
       formData.append("rules", JSON.stringify(selectedRules));
 
       const amenityObject = {};
