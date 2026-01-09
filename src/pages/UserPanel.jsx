@@ -14,10 +14,21 @@ const UserPanel = ({ onSave, onLogout }) => {
   const [animateSidebar, setAnimateSidebar] = useState(false);
   const [animateGreeting, setAnimateGreeting] = useState(false);
 
+  const [passwords, setPasswords] = useState({
+  current: "",
+  new: "",
+  confirm: "",
+});
+
+const [loading, setLoading] = useState(false);
+const [passwordMsg, setPasswordMsg] = useState("");
+
+  const [bookedPGs, setBookedPGs] = useState([]);
+const [loadingBookings, setLoadingBookings] = useState(false);
+
   const [showCurrent, setShowCurrent] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [passwords, setPasswords] = useState({ current: "", new: "", confirm: "" });
   const [passwordRules, setPasswordRules] = useState({
     length: false,
     letter: false,
@@ -80,6 +91,37 @@ const UserPanel = ({ onSave, onLogout }) => {
     verifyAndFetchUser();
   }, [navigate]);
 
+
+
+
+  useEffect(() => {
+  const fetchBookedPGs = async () => {
+    const token = localStorage.getItem("hlopgToken");
+    if (!token) return;
+
+    try {
+      setLoadingBookings(true);
+
+      const res = await api.get("/booking/user-bookings", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (res.status === 200) {
+        setBookedPGs(res.data.bookings || []);
+      }
+    } catch (error) {
+      console.error("Failed to fetch booked PGs:", error);
+    } finally {
+      setLoadingBookings(false);
+    }
+  };
+
+  fetchBookedPGs();
+}, []);
+
+
   const handleProfileChange = (e) => {
     const file = e.target.files[0];
     if (file) setDraftUser({ ...draftUser, profileImage: URL.createObjectURL(file) });
@@ -90,16 +132,92 @@ const UserPanel = ({ onSave, onLogout }) => {
     if (file) setDraftUser({ ...draftUser, [side]: URL.createObjectURL(file) });
   };
 
+
+  const handleUpdatePassword = async () => {
+  if (!passwords.current || !passwords.new || !passwords.confirm) {
+    setPasswordMsg("All fields are required");
+    return;
+  }
+
+  if (passwords.new !== passwords.confirm) {
+    setPasswordMsg("Passwords do not match");
+    return;
+  }
+
+  try {
+    setLoading(true);
+    setPasswordMsg("");
+
+    const token = localStorage.getItem("hlopgToken");
+
+const res = await api.put(
+  "/auth/change-password",
+  {
+    currentPassword: passwords.current,
+    newPassword: passwords.new,
+  },
+  {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+);
+ 
+
+    setPasswordMsg(res.data.message || "Password updated successfully");
+
+    // reset fields
+    setPasswords({ current: "", new: "", confirm: "" });
+  } catch (err) {
+    setPasswordMsg(
+      err.response?.data?.message || "Failed to update password"
+    );
+  } finally {
+    setLoading(false);
+  }
+};
   const handleInputChange = (field, value) => setDraftUser({ ...draftUser, [field]: value });
 
-  const handleSaveChanges = () => {
-    setUser({ ...draftUser });
-    setAnimateSidebar(true);
-    setAnimateGreeting(true);
-    if (onSave) onSave(draftUser);
-    setMessage("Changes saved successfully!");
+const handleSaveChanges = async () => {
+  try {
+    const token = localStorage.getItem("hlopgToken");
+
+    const payload = {
+      name: draftUser.name,
+      gender: draftUser.gender,
+    };
+
+    const res = await api.put(
+      "/auth/update-basic-info",
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (res.data.success) {
+      // Update local state with DB response
+      setUser(res.data.user);
+      setDraftUser(res.data.user);
+
+      // UI animations
+      setAnimateSidebar(true);
+      setAnimateGreeting(true);
+
+      if (onSave) onSave(res.data.user);
+
+      setMessage("Changes saved successfully!");
+      setTimeout(() => setMessage(""), 3000);
+    }
+  } catch (error) {
+    console.error("Failed to update user info:", error);
+    setMessage("Failed to save changes");
     setTimeout(() => setMessage(""), 3000);
-  };
+  }
+};
+
 
   useEffect(() => {
     if (animateSidebar) {
@@ -142,7 +260,8 @@ const UserPanel = ({ onSave, onLogout }) => {
   };
 
   const handlePasswordChange = (field, value) => {
-    setPasswords({ ...passwords, [field]: value });
+  setPasswords((prev) => {
+    const updated = { ...prev, [field]: value };
 
     if (field === "new") {
       setPasswordRules({
@@ -151,83 +270,120 @@ const UserPanel = ({ onSave, onLogout }) => {
         number: /\d/.test(value),
         symbol: /[^a-zA-Z0-9]/.test(value),
       });
-      setConfirmValid(value === passwords.confirm || passwords.confirm === "");
-    } else if (field === "confirm") {
-      setConfirmValid(value === passwords.new);
+
+      setConfirmValid(
+        updated.confirm === "" || value === updated.confirm
+      );
     }
-  };
+
+    if (field === "confirm") {
+      setConfirmValid(value === updated.new);
+    }
+
+    return updated;
+  });
+};
+
+const canUpdatePassword =
+  passwordRules.length &&
+  passwordRules.letter &&
+  passwordRules.number &&
+  passwordRules.symbol &&
+  confirmValid;
 
   const renderSection = () => {
     switch (activeSection) {
-      case "basic-info":
-        return (
-          <>
-            <h3>USER INFORMATION</h3>
-            <div className="info-section">
-              <div className="profile">
-                <div className="profile-image">
-                  <img
-                    src={draftUser.profileImage || "https://cdn-icons-png.flaticon.com/512/4140/4140048.png"}
-                    alt="Profile"
-                  />
-                </div>
-                <label htmlFor="profileUpload" className="change-btn">Change</label>
-                <input type="file" id="profileUpload" accept="image/*" onChange={handleProfileChange} hidden />
-              </div>
+     case "basic-info":
+  return (
+    <>
+      <h3>USER INFORMATION</h3>
+      <div className="info-section">
+        <div className="profile">
+          <div className="profile-image">
+            <img
+              src={
+                draftUser.profileImage ||
+                "https://cdn-icons-png.flaticon.com/512/4140/4140048.png"
+              }
+              alt="Profile"
+            />
+          </div>
+          <label htmlFor="profileUpload" className="change-btn">
+            Change
+          </label>
+          <input
+            type="file"
+            id="profileUpload"
+            accept="image/*"
+            onChange={handleProfileChange}
+            hidden
+          />
+        </div>
 
-              <div className="info-form">
-                {[
-                  { label: "Name", field: "name", type: "text" },
-                  { label: "Email", field: "email", type: "email" },
-                  { label: "Mobile Number", field: "phone", type: "text" },
-                  { label: "Gender", field: "gender", type: "text" },
-                  { label: "City", field: "city", type: "text" },
-                ].map((f, idx) => (
-                  <div className="form-group" key={idx}>
-                    <label>{f.label}</label>
-                    <input type={f.type} value={draftUser[f.field] || ""} onChange={(e) => handleInputChange(f.field, e.target.value)} />
-                  </div>
-                ))}
-
-                {/* <div className="aadhaar-section">
-                  <label>Aadhaar</label>
-                  <div className="aadhaar-boxes">
-                    {["aadhaarFront", "aadhaarBack"].map((side) => (
-                      <div className="aadhaar-box" key={side}>
-                        <label htmlFor={side}>
-                          {draftUser[side] ? (
-                            <img src={draftUser[side]} alt={side} className="aadhaar-preview" />
-                          ) : (
-                            <>
-                              <FaPlus className="plus-icon" />
-                              <p>{side === "aadhaarFront" ? "Front side Picture" : "Back side Picture"}</p>
-                            </>
-                          )}
-                        </label>
-                        <input type="file" id={side} accept="image/*" onChange={(e) => handleAadhaarChange(side, e)} hidden />
-                      </div>
-                    ))}
-                  </div>
-                </div> */}
-
-                <button className="save-btn" onClick={handleSaveChanges}>Save Changes</button>
-                {message && <p className="save-message">{message}</p>}
-              </div>
+        <div className="info-form">
+          {[
+            { label: "Name", field: "name", type: "text", editable: true },
+            { label: "Email", field: "email", type: "email", editable: false },
+            { label: "Mobile Number", field: "phone", type: "text", editable: false },
+            { label: "Gender", field: "gender", type: "text", editable: true },
+            { label: "City", field: "city", type: "text", editable: false },
+          ].map((f, idx) => (
+            <div className="form-group" key={idx}>
+              <label>{f.label}</label>
+              <input
+                type={f.type}
+                value={draftUser[f.field] || ""}
+                disabled={!f.editable}
+                className={!f.editable ? "readonly" : ""}
+                onChange={(e) =>
+                  f.editable &&
+                  handleInputChange(f.field, e.target.value)
+                }
+              />
             </div>
-          </>
-        );
+          ))}
 
-      case "booked-pg":
-        return (
-          <>
-            <h3>BOOKED PG’S LIST</h3>
-            <div className="pg-list">
-              {user?.bookedPGs?.length ? (
-                user.bookedPGs.map((pg, idx) => <div className="pg-card" key={idx}>🏠 {pg}</div>)
-              ) : (<p>No booked PGs.</p>)}
+          <button className="save-btn" onClick={handleSaveChanges}>
+            Save Changes
+          </button>
+
+          {message && <p className="save-message">{message}</p>}
+        </div>
+      </div>
+    </>
+  );
+
+     case "booked-pg":
+  return (
+    <>
+      <h3>BOOKED PG’S LIST</h3>
+
+      {loadingBookings ? (
+        <p>Loading bookings...</p>
+      ) : bookedPGs.length ? (
+        <div className="pg-list">
+          {bookedPGs.map((booking) => (
+            <div className="pg-card" key={booking.bookingId}>
+              <h4>🏠 {booking.hostelName}</h4>
+
+              <p>📍 {booking.area}, {booking.city}</p>
+              <p>🛏 Sharing: {booking.sharing}</p>
+              <p>📅 Joining Date: {booking.date}</p>
+              <p>💰 Rent: ₹{booking.rentAmount}</p>
+              <p>🔐 Deposit: ₹{booking.deposit}</p>
+              <p>💳 Total: ₹{booking.totalAmount}</p>
+
+              <p className={`status ${booking.status}`}>
+                Status: <strong>{booking.status}</strong>
+              </p>
             </div>
-          </>
-        );
+          ))}
+        </div>
+      ) : (
+        <p>No booked PGs.</p>
+      )}
+    </>
+  );
 
       case "liked-pg":
         return (
@@ -298,8 +454,15 @@ const UserPanel = ({ onSave, onLogout }) => {
                 <p className={passwordRules.symbol ? "valid" : ""}>• Includes symbols</p>
               </div>
 
-              <button className="save-btn">Update Password</button>
-            </div>
+<button
+  className="save-btn"
+  onClick={handleUpdatePassword}
+  disabled={loading}
+>
+  {loading ? "Updating..." : "Update Password"}
+</button>
+
+{passwordMsg && <p className="save-message">{passwordMsg}</p>}            </div>
           </>
         );
 

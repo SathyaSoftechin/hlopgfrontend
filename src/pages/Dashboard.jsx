@@ -58,24 +58,28 @@ useEffect(() => {
 }, [ownerId]);
 
 
-// Fetch Owner PGs
-useEffect(() => {
-  const fetchOwnerPGs = async () => {
-    try {
-      const res = await api.get(`/owner/pgs/${ownerId}`);
-      setPgs(res.data.data || res.data); 
-    } catch (err) {
-      console.error("Error fetching PGs:", err);
-      setError("Failed to load PGs");
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  if (ownerId) {
-    fetchOwnerPGs();
-  }
-}, [ownerId]);
+  useEffect(() => {
+    const fetchOwnerPGs = async () => {
+      try {
+        const token = localStorage.getItem("hlopgToken");
+        if (!token) throw new Error("Token missing");
+
+        const res = await api.get("/owner/pgs", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        setPgs(res.data.data || []);
+      } catch (err) {
+        console.error("Error fetching PGs:", err);
+        setError("Failed to load PGs");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOwnerPGs(); // ✅ Call directly, no ownerId needed
+  }, []);
 
   const chartData = [
     { date: "17 SEP", bookings: 4 },

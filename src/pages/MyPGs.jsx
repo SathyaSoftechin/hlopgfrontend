@@ -5,19 +5,23 @@ import "./MyPGs.css";
 
 import pgDefaultImg from "../assets/pg1.png";
 
-const MyPGs = ({ user }) => {
+const MyPGs = () => {
   const [pgs, setPgs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const ownerId = user?.owner_id;
-
   useEffect(() => {
     const fetchOwnerPGs = async () => {
       try {
-        const res = await api.get(`/owner/pgs/${ownerId}`);
-        setPgs(res.data.data || res.data);
+        const token = localStorage.getItem("hlopgToken");
+        if (!token) throw new Error("Token missing");
+
+        const res = await api.get("/owner/pgs", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        setPgs(res.data.data || []);
       } catch (err) {
         console.error("Error fetching PGs:", err);
         setError("Failed to load PGs");
@@ -26,8 +30,8 @@ const MyPGs = ({ user }) => {
       }
     };
 
-    if (ownerId) fetchOwnerPGs();
-  }, [ownerId]);
+    fetchOwnerPGs(); // ✅ Call directly, no ownerId needed
+  }, []);
 
   const handleAction = (hostel_id, action) => {
     switch (action) {
@@ -60,10 +64,10 @@ const MyPGs = ({ user }) => {
               <img src={pg.image || pgDefaultImg} alt={pg.hostel_name} />
               <h4>{pg.hostel_name}</h4>
               <div className="pg-actions">
-                <button onClick={() => handleAction(pg.hostel_id, "editPG")}>
+                <button onClick={() => handleAction(pg.hostel_id, "editRooms")}>
                   View Room's
                 </button>
-                <button onClick={() => handleAction(pg.hostel_id, "editRooms")}>
+                <button onClick={() => handleAction(pg.hostel_id, "editPG")}>
                   Edit PG Details
                 </button>
                 {/* <button onClick={() => handleAction(pg.hostel_id, "viewMembers")}>
