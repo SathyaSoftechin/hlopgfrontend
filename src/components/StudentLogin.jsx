@@ -3,6 +3,7 @@ import { useNavigate, Link, useLocation} from "react-router-dom";
 import Header from "./Header"; // ✅ Reuse global Header
 import "./StudentLogin.css";
 import api from "../api.jsx";
+import Login from "../assets/login.png"; // ✅ Import login image
 
 
 const StudentLogin = () => {
@@ -60,6 +61,9 @@ const StudentLogin = () => {
 
   return (
     
+    <div className="login">
+      <img src={Login} alt="Login" />
+
     <div className="student-login-container">
       
       <h2>Student / Professional Login</h2>
@@ -95,6 +99,7 @@ const StudentLogin = () => {
       <p className="student-signup-link">
         Don’t have an account? <Link to="/student-signup">Create Account</Link>
       </p>
+    </div>
     </div>
   );
 };

@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import "./StudentSignup.css";
 import Header from "./Header";
 import api from "../api.jsx";
+import Login from "../assets/login.png";
 
 const StudentSignup = () => {
   const navigate = useNavigate();
@@ -204,6 +205,8 @@ const StudentSignup = () => {
   return (
     <>
       <Header />
+      <div className="login">
+            <img src={Login} alt="Login" />
 
       <div className="student-signup-container">
         <h2>Student / Professional Signup</h2>
@@ -337,6 +340,7 @@ const StudentSignup = () => {
         <p className="student-login-link">
           Already have an account? <Link to="/StudentLogin">Log in</Link>
         </p>
+      </div>
       </div>
 
       {showOTPModal && (

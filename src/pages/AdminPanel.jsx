@@ -19,6 +19,7 @@ import PGMembersList from "./PGMembersList";
 import PaymentsList from "./PaymentsList";
 import Reviews from "./Reviews";
 // import MyRooms from "./MyRooms";
+import logo from "../assets/logo.png";
 
 import "./AdminPanel.css";
 import { useNavigate } from "react-router-dom";
@@ -132,7 +133,7 @@ const [user, setUser] = useState(null);
     style={{ cursor: "pointer" }}
     onClick={() => navigate("/")}   // ✅ Navigate to home on click
   >
-    <h2 className="logo">🏠 HloPG</h2>
+    <img src={logo} alt="HLOPG Logo" className="app-logo" />
   </div>
 
           <ul className="sidebar-menu">
