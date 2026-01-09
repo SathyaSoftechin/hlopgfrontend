@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, Link, useLocation} from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import Header from "./Header"; // ✅ Reuse global Header
 import "./StudentLogin.css";
 import api from "../api.jsx";
 import Login from "../assets/login.png"; // ✅ Import login image
-
 
 const StudentLogin = () => {
   const navigate = useNavigate();
@@ -14,44 +13,43 @@ const StudentLogin = () => {
     identifier: "",
     password: "",
   });
-      const [error, setError] = useState(""); 
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
- 
-   useEffect(() => {
-      setError("");
-      const token = localStorage.getItem("hlopgToken");
-      const user = localStorage.getItem("hlopgUser");
-      const owner = localStorage.getItem("hlopgOwner");
-  
-      if (token && user) {
-        navigate("/user-dashboard");
-      } else if (token && owner) {
-        navigate("/owner-dashboard");
-      }
-    }, [navigate]);
+
+  useEffect(() => {
+    setError("");
+    const token = localStorage.getItem("hlopgToken");
+    const user = localStorage.getItem("hlopgUser");
+    const owner = localStorage.getItem("hlopgOwner");
+
+    if (token && user) {
+      navigate("/user-dashboard");
+    } else if (token && owner) {
+      navigate("/owner-dashboard");
+    }
+  }, [navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     console.log("Student Login Data:", formData);
 
-     try {
-      const res = await api.post("/auth/loginuser", {formData});
-      console.log(res.data); 
-       const { token, user } = res.data;
+    try {
+      const res = await api.post("/auth/loginuser", { formData });
+      console.log(res.data);
+      const { token, user } = res.data;
       // Save token and user in localStorage
       localStorage.setItem("hlopgToken", token);
       localStorage.setItem("hlopgUser", JSON.stringify(user));
-      if(!token || !user){
+      if (!token || !user) {
         setError("Login failed");
         return;
-      }
-      else{
+      } else {
         console.log("Student Login successful");
-      navigate(redirectTo); // redirect back to hostel page
+        navigate(redirectTo); // redirect back to hostel page
       }
     } catch (err) {
       console.error(err);
@@ -60,46 +58,45 @@ const StudentLogin = () => {
   };
 
   return (
-    
     <div className="login">
       <img src={Login} alt="Login" />
 
-    <div className="student-login-container">
-      
-      <h2>Student / Professional Login</h2>
+      <div className="student-login-container">
+        <h2>Student / Professional Login</h2>
 
-      {error && <div className="error-message">{error}</div>}
+        {error && <div className="error-message">{error}</div>}
 
-      <form className="student-login-form" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="identifier"
-          placeholder="Email Address"
-          value={formData.identifier}
-          onChange={handleChange}
-          required
-        />
+        <form className="student-login-form" onSubmit={handleSubmit}>
+          <input
+            type="text"
+            name="identifier"
+            placeholder="Email Address"
+            value={formData.identifier}
+            onChange={handleChange}
+            required
+          />
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
 
-        <div className="forgot-password">
-          <Link to="/student-forgot-password">Forgot Password?</Link>
-        </div>
+          <div className="forgot-password">
+            <Link to="/student-forgot-password">Forgot Password?</Link>
+          </div>
 
-        <button type="submit">Log In</button>
-      </form>
+          <button type="submit">Log In</button>
+        </form>
 
-      <p className="student-signup-link">
-        Don’t have an account? <Link to="/student-signup">Create Account</Link>
-      </p>
-    </div>
+        <p className="student-signup-link">
+          Don’t have an account?{" "}
+          <Link to="/student-signup">Create Account</Link>
+        </p>
+      </div>
     </div>
   );
 };
