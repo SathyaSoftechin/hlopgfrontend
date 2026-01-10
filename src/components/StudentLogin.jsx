@@ -3,7 +3,7 @@ import { useNavigate, Link, useLocation } from "react-router-dom";
 import Header from "./Header"; // ✅ Reuse global Header
 import "./StudentLogin.css";
 import api from "../api.jsx";
-import Login from "../assets/login.png"; // ✅ Import login image
+import login from "../assets/login.png"; // ✅ Import login image
 
 const StudentLogin = () => {
   const navigate = useNavigate();
