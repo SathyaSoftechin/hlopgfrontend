@@ -67,9 +67,9 @@ const MyPGs = () => {
                 <button onClick={() => handleAction(pg.hostel_id, "editRooms")}>
                   View Room's
                 </button>
-                <button onClick={() => handleAction(pg.hostel_id, "editPG")}>
+                {/* <button onClick={() => handleAction(pg.hostel_id, "editPG")}>
                   Edit PG Details
-                </button>
+                </button> */}
                 {/* <button onClick={() => handleAction(pg.hostel_id, "viewMembers")}>
                   View PG Members
                 </button> */}
