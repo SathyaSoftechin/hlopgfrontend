@@ -59,7 +59,7 @@ const StudentLogin = () => {
 
   return (
     <div className="login">
-      <img src={Login} alt="Login" />
+      <img src={login} alt="Login" />
 
       <div className="student-login-container">
         <h2>Student / Professional Login</h2>
