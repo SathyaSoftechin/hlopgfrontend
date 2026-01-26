@@ -11,7 +11,7 @@ import {
 } from "react-icons/fa";
 import { BiCctv } from "react-icons/bi"; // ✅ Better CCTV icon
 import Header from "../../components/Header";
-import api from "../../api";
+import api, { BASE_URL } from "../../api";
 
 import pg1 from "../../assets/pg1.jpg";
 import pg2 from "../../assets/pg2.jpg";
@@ -71,10 +71,15 @@ const CityHostels = () => {
           const genderText = (h.pg_type || "").toLowerCase();
           if (genderText.includes("women")) genderLabel = "💁🏻‍♀️ Women's PG";
           else if (genderText.includes("co")) genderLabel = "👫 Co-Living";
+ // 🖼️ Resolve hostel image
+let img = pg1; // fallback
 
-          const images = [pg1, pg2, pg3, pg4];
-          const img = images[index % images.length];
-
+if (Array.isArray(h.images) && h.images.length > 0) {
+  const firstImg = h.images[0];
+  img = firstImg.startsWith("http")
+    ? firstImg
+    : `${BASE_URL}${firstImg}`;
+}
           return {
             id: h.hostel_id,
             img,

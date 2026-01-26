@@ -1,9 +1,15 @@
 // frontend/api.jsx
 import axios from "axios";
 
+ export const BASE_URL = "http://localhost:5000";
+
 const api = axios.create({
   // baseURL: "https://hlopgbackend.vercel.app/api",
-    baseURL: "https://hlopgbackend.in/api",
+    //baseURL: "https://hlopgbackend.in/api",
+
+        //baseURL: "http://localhost:5000/api",
+          baseURL: `${BASE_URL}/api`,
+
 
   timeout: 20000, // ⏳ 10 sec max wait (detect slow server)
 });

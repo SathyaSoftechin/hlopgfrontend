@@ -18,7 +18,7 @@ import {
 } from "react-icons/fa";
 import { MdOutlineSmokeFree, MdNoDrinks } from "react-icons/md";
 import Popup from "../components/Popup";
-import api from "../api";
+import api, { BASE_URL } from "../api";
 
 // Fallback images
 import pg1 from "../assets/pg1.jpg";
@@ -113,8 +113,11 @@ const HostelPage = () => {
   }, [hostelId]);
 
   // Image carousel
-  const images = hostelData?.images?.length
-    ? hostelData.images
+  const images =
+  hostelData?.images && hostelData.images.length > 0
+    ? hostelData.images.map((img) =>
+        img.startsWith("http") ? img : `${BASE_URL}${img}`
+      )
     : [pg1, pg2, pg3, pg4, pg5];
   const prevImage = () =>
     setMainImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));

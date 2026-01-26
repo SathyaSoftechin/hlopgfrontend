@@ -12,8 +12,9 @@ import {
   FaChevronLeft,
   FaChevronRight,
 } from "react-icons/fa";
-import api from "../api";
-import defaultPGImg from "../assets/pg1.jpg";
+import api, { BASE_URL } from "../api";
+
+ import defaultPGImg from "../assets/pg1.jpg";
 import hyderabadBg from "../assets/hyderabad.png";
 import chennaiBg from "../assets/chennai.png";
 import mumbaiBg from "../assets/mumbai.png";
@@ -63,7 +64,10 @@ function Home() {
             ...city,
             pgList: filtered.map((h, i) => ({
               id: h.hostel_id || i,
-              img: h.img || defaultPGImg,
+               img:
+    h.images && h.images.length > 0
+      ? `${BASE_URL}${h.images[0]}`
+      : defaultPGImg,
               name: h.hostel_name || "Unnamed PG",
               location: h.area || h.city || "Unknown",
               rating: h.rating || 4.5,
