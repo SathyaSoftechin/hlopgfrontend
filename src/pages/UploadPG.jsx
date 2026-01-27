@@ -272,6 +272,28 @@ const UploadPG = ({ user }) => {
       return;
     }
 
+      if (!pgLocation.state || !pgLocation.city || !pgLocation.area) {
+    return "PG Location (State, City, Area) is required";
+  }
+
+
+   const validSharing = sharingOptions.some(
+    (s) => s.type && s.price && Number(s.price) > 0
+  );
+  if (!validSharing) {
+    return "At least one Sharing type with valid price is required";
+  }
+
+  if (selectedFurnish.length === 0) {
+    return "Please select at least one Amenity";
+  }
+
+  if (selectedRules.length === 0) {
+    return "Please select at least one Rule";
+  }
+
+
+
     setLoading(true);
     try {
       const token = localStorage.getItem("hlopgToken");
