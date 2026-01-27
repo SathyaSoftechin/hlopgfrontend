@@ -30,7 +30,7 @@ const MyPGs = () => {
       }
     };
 
-    fetchOwnerPGs(); // ✅ Call directly, no ownerId needed
+    fetchOwnerPGs();
   }, []);
 
   const handleAction = (hostel_id, action) => {
@@ -38,12 +38,11 @@ const MyPGs = () => {
       case "editPG":
         navigate(`/edit-pg/${hostel_id}`);
         break;
-      case "editRooms":
-        navigate(`/edit-rooms/${hostel_id}`);
-        break;
+
       case "viewMembers":
-        // navigate(`/pg-members/${hostel_id}`);
+        navigate(`/pg-members/${hostel_id}`);
         break;
+
       default:
         break;
     }
@@ -55,6 +54,7 @@ const MyPGs = () => {
   return (
     <div className="my-pgs-page">
       <h3>My PGs</h3>
+
       {pgs.length === 0 ? (
         <p>No PGs found</p>
       ) : (
@@ -63,16 +63,23 @@ const MyPGs = () => {
             <div className="pg-card" key={pg.hostel_id}>
               <img src={pg.image || pgDefaultImg} alt={pg.hostel_name} />
               <h4>{pg.hostel_name}</h4>
+
               <div className="pg-actions">
-                <button onClick={() => handleAction(pg.hostel_id, "editRooms")}>
-                  View Room's
+                <button
+                  onClick={() =>
+                    handleAction(pg.hostel_id, "viewMembers")
+                  }
+                >
+                  View PG Members
                 </button>
-                <button onClick={() => handleAction(pg.hostel_id, "editPG")}>
+
+                <button
+                  onClick={() =>
+                    handleAction(pg.hostel_id, "editPG")
+                  }
+                >
                   Edit PG Details
                 </button>
-                {/* <button onClick={() => handleAction(pg.hostel_id, "viewMembers")}>
-                  View PG Members
-                </button> */}
               </div>
             </div>
           ))}
