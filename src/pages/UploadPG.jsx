@@ -273,23 +273,27 @@ const UploadPG = ({ user }) => {
     }
 
       if (!pgLocation.state || !pgLocation.city || !pgLocation.area) {
-    return "PG Location (State, City, Area) is required";
-  }
+    alert("PG Location (State, City, Area) is required");
+      return;
+    }
 
 
    const validSharing = sharingOptions.some(
     (s) => s.type && s.price && Number(s.price) > 0
   );
   if (!validSharing) {
-    return "At least one Sharing type with valid price is required";
+    alert("At least one Sharing type with valid price is required");
+    return;
   }
 
   if (selectedFurnish.length === 0) {
-    return "Please select at least one Amenity";
+    alert("Please select at least one Amenity");
+    return;
   }
 
   if (selectedRules.length === 0) {
-    return "Please select at least one Rule";
+    alert("Please select at least one Rule");
+    return;
   }
 
 
