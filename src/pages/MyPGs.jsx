@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../api";
+import api, { BASE_URL } from "../api";
 import "./MyPGs.css";
 
 import pgDefaultImg from "../assets/pg1.png";
@@ -61,7 +61,18 @@ const MyPGs = () => {
         <div className="pgs-grid">
           {pgs.map((pg) => (
             <div className="pg-card" key={pg.hostel_id}>
-              <img src={pg.image || pgDefaultImg} alt={pg.hostel_name} />
+             <img
+  src={
+    pg.images && pg.images.length > 0
+      ? `${BASE_URL}${pg.images[0]}`
+      : pgDefaultImg
+  }
+  alt={pg.hostel_name}
+  onError={(e) => {
+    e.target.onerror = null;
+    e.target.src = pgDefaultImg;
+  }}
+/>
               <h4>{pg.hostel_name}</h4>
 
               <div className="pg-actions">

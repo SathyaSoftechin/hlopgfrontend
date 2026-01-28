@@ -10,7 +10,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import "./Dashboard.css";
-import api from "../api";   // <-- Make sure api is imported if used
+import api, { BASE_URL } from "../api";
 
 
 // Image Imports
@@ -116,10 +116,18 @@ useEffect(() => {
       ) : (
         pgs.map((pg) => (
           <div className="pg-card" key={pg._id}>
-            <img 
-              src={pg.image || pg1} 
-              alt={pg.hostel_name} 
-            />
+           <img
+  src={
+    pg.images && pg.images.length > 0
+      ? `${BASE_URL}${pg.images[0]}`
+      : pg1
+  }
+  alt={pg.hostel_name}
+  onError={(e) => {
+    e.target.onerror = null;
+    e.target.src = pg1;
+  }}
+/>
             <p>{pg.hostel_name}</p>
           </div>
         ))

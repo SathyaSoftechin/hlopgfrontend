@@ -45,7 +45,7 @@ const OwnerLogin = () => {
       }
       else{
         console.log("Owner Login successful");
-        navigate("/");
+        navigate("/owner-dashboard");
       }
 
     } catch (err) {

@@ -28,7 +28,7 @@ import MyPGs from "./pages/MyPGs";
 
 import EditPG from "./pages/EditPG";
 import EditRooms from "./pages/EditRooms";
-import PGMembers from "./pages/PGMembersList";
+import PGMembers from "./pages/PGMembers";
 
 import CityHostels from "./pages/cities/CityHostels";
 import UserProfile from "./pages/UserPanel";
