@@ -40,7 +40,16 @@ const HostelPage = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
   const [userId, setUserId] = useState(null);
+    const [isOwner, setIsOwner] = useState(false);
 
+
+  // ---------------- Detect Owner ----------------
+  useEffect(() => {
+    const owner = localStorage.getItem("hlopgOwner");
+    if (owner) setIsOwner(true);
+  }, []);
+
+  
   // Load Razorpay script
   useEffect(() => {
     const script = document.createElement("script");
@@ -441,9 +450,14 @@ const token = localStorage.getItem("hlopgToken");
 
       {/* Book Now */}
       <div className="book-now">
-        <button className="book-now-btn" onClick={handleBookNow}>
-          Book Now
-        </button>{" "}
+         {!isOwner && ( // Only show button if not an owner
+    <button
+      className="book-now-btn"
+      onClick={handleBookNow}
+    >
+      Book Now
+    </button>
+  )}
       </div>
 
       {isPopupOpen && (

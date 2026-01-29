@@ -64,7 +64,7 @@ const PGMembersList = () => {
           phone: b.phone || "—",
           sharing: b.sharing,
           joiningDate: b.joiningDate,
-          vacateDate: b.vacateDate,
+        vacateDate: b.vacateDate,  
           rentAmount: b.rentAmount ?? 0,
           status: b.status,
         }));
@@ -177,11 +177,11 @@ const PGMembersList = () => {
                   {m.status}
                 </td>
                 <td>
-                  {m.vacateDate
-                    ? new Date(m.vacateDate).toLocaleDateString()
-                    : "-"}
-                </td>
-              </tr>
+                {m.vacateDate
+                  ? new Date(m.vacateDate).toLocaleDateString()
+                  : "-"}
+              </td>
+                 </tr>
             ))}
           </tbody>
         </table>

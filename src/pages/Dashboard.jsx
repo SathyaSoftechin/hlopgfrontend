@@ -21,8 +21,10 @@ const Dashboard = ({ user }) => {
   /* ================= SAFE DEFAULT STATES ================= */
   const [pgs, setPgs] = useState([]);
   const [pgUpdate, setPgUpdate] = useState(null);
+const [membersIn, setMembersIn] = useState([]);
+const [loadingMembersIn, setLoadingMembersIn] = useState(true);
 
-  const [membersIn, setMembersIn] = useState(null);
+
   const [membersOut, setMembersOut] = useState(null);
 
   const [bookingsCount, setBookingsCount] = useState(null);
@@ -79,6 +81,42 @@ const Dashboard = ({ user }) => {
     fetchDashboardData();
   }, [token]);
 
+
+  useEffect(() => {
+  const fetchMembersIn = async () => {
+    try {
+      const res = await api.get("/owner/members-in", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setMembersIn(res.data?.data || []);
+    } catch (err) {
+      console.error("Members IN fetch failed", err);
+    } finally {
+      setLoadingMembersIn(false);
+    }
+  };
+
+  fetchMembersIn();
+}, [token]);
+
+
+// Fetch Members OUT
+useEffect(() => {
+  const fetchMembersOut = async () => {
+    try {
+      const res = await api.get("/owner/members-out", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setMembersOut(res.data || []);
+    } catch (err) {
+      console.error("Members OUT fetch failed:", err);
+    }
+  };
+
+  fetchMembersOut();
+}, [token]);
+
   return (
     <div className="dashboard-container">
       {/* Greeting */}
@@ -127,42 +165,69 @@ const Dashboard = ({ user }) => {
       {/* ================= MEMBERS ================= */}
       <section className="members-lists">
         <div className="members-table">
-          <h4 className="section-title">Members-in</h4>
-          {membersIn ? (
-            <table>
-              <tbody>
-                {membersIn.map((m) => (
-                  <tr key={m.id}>
-                    <td>{m.name}</td>
-                    <td>{m.age}</td>
-                    <td>{m.shareType}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          ) : (
-            <p>Data needs to be fetched</p>
-          )}
-        </div>
+    <h4 className="section-title">Members-in Today</h4>
 
-        <div className="members-table">
-          <h4 className="section-title">Members-out</h4>
-          {membersOut ? (
-            <table>
-              <tbody>
-                {membersOut.map((m) => (
-                  <tr key={m.id}>
-                    <td>{m.name}</td>
-                    <td>{m.age}</td>
-                    <td>{m.shareType}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          ) : (
-            <p>Data needs to be fetched</p>
-          )}
-        </div>
+    {loadingMembersIn ? (
+      <p>Loading…</p>
+    ) : membersIn.length === 0 ? (
+      <p>No active members</p>
+    ) : (
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>PG Name</th>
+            <th>Share Type</th>
+            <th>User Phone Number</th>
+
+          </tr>
+        </thead>
+       <tbody>
+  {membersIn.map((m, index) => (
+    <tr key={index}>
+      <td>{m.name}</td>
+      <td>{m.pgName}</td>
+      <td>{m.shareType}</td>
+      <td>{m.phone}</td>
+
+    </tr>
+  ))}
+</tbody>
+      </table>
+    )}
+  </div>
+
+        {/* Members OUT */}
+  <div className="members-table">
+    <h4 className="section-title">Members-out Today</h4>
+    {membersOut && membersOut.length > 0 ? (
+      <table>
+           <thead>
+          <tr>
+            <th>Name</th>
+            <th>PG Name</th>
+            <th>Share Type</th>
+            <th>User Phone Number</th>
+
+          </tr>
+        </thead>
+                <tbody>
+
+          {membersOut.map((m, index) => (
+            <tr key={index}>
+              <td>{m.name}</td>
+              <td>{m.pgName}</td>
+              <td>{m.shareType}</td>
+              <td>{m.phone}</td>
+
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    ) : (
+      <p>No members vacated today</p>
+    )}
+  </div>
       </section>
 
       {/* ================= BOOKINGS ================= */}
