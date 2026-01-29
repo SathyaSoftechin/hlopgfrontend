@@ -14,16 +14,16 @@ import {
 
 import Dashboard from "./Dashboard";
 import UploadPG from "./UploadPG";
- import MyPGs from "./MyPGs";
+import MyPGs from "./MyPGs";
 import PGMembersList from "./PGMembersList";
 import PaymentsList from "./PaymentsList";
 import Reviews from "./Reviews";
 // import MyRooms from "./MyRooms";
+import Logo from "../assets/logo.png";
 
 import "./AdminPanel.css";
 import { useNavigate } from "react-router-dom";
-import api from "../api";   // <-- Make sure api is imported if used
-
+import api from "../api"; // <-- Make sure api is imported if used
 
 const sidebarOptions = [
   { name: "Dashboard", icon: <FaHome /> },
@@ -35,14 +35,13 @@ const sidebarOptions = [
   // { name: "My Rooms", icon: <FaCogs /> },
 ];
 
-
 const AdminPanel = () => {
   const [selected, setSelected] = useState("Dashboard");
 
   const navigate = useNavigate(); // ✅ Correct position
-const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null);
 
-// const hideHeaderFooter = window.hideHeaderFooter || false;
+  // const hideHeaderFooter = window.hideHeaderFooter || false;
 
   // ---------------- LOGOUT ----------------
   const handleLogout = () => {
@@ -51,9 +50,8 @@ const [user, setUser] = useState(null);
     localStorage.removeItem("hlopgOwner");
 
     alert("Logged out successfully!");
-    navigate("/");   // ✅ Now works
+    navigate("/"); // ✅ Now works
   };
-
 
   // ---------- AUTO AUTH CHECK ------------
   useEffect(() => {
@@ -101,39 +99,46 @@ const [user, setUser] = useState(null);
     verifyAndFetchUser();
   }, [navigate]);
 
-
   // ----------- Render Selected Component ----------
   const renderComponent = () => {
     switch (selected) {
-      case "Dashboard":         return <Dashboard user={user} />;
-      case "Upload PG":       return <UploadPG />;
-      case "My PG’s":         return <MyPGs user={user} />;
-      case "PG Members List": return <PGMembersList  user={user} />;
-      case "Payments List":   return <PaymentsList />;
-      case "Reviews":         return <Reviews />;
+      case "Dashboard":
+        return <Dashboard user={user} />;
+      case "Upload PG":
+        return <UploadPG />;
+      case "My PG’s":
+        return <MyPGs user={user} />;
+      case "PG Members List":
+        return <PGMembersList user={user} />;
+      case "Payments List":
+        return <PaymentsList />;
+      case "Reviews":
+        return <Reviews />;
       // case "My Rooms":        return <MyRooms />;
       default:
-        return <div className="placeholder">
-          <h2>{selected}</h2>
-          <p>Content coming soon...</p>
-        </div>;
+        return (
+          <div className="placeholder">
+            <h2>{selected}</h2>
+            <p>Content coming soon...</p>
+          </div>
+        );
     }
   };
 
-
   return (
     <div className="admin-container">
-
       {/* Sidebar */}
       <aside className="sidebar">
         <div className="sidebar-top">
-        <div
-    className="logo-container"
-    style={{ cursor: "pointer" }}
-    onClick={() => navigate("/")}   // ✅ Navigate to home on click
-  >
-    <h2 className="logo">🏠 HloPG</h2>
-  </div>
+          <div
+            className="logo-container"
+            style={{ cursor: "pointer" }}
+            onClick={() => navigate("/")} // ✅ Navigate to home on click
+          >
+            <h2 className="logo">
+              <img src={Logo} alt="HloPG Logo" />
+            </h2>
+          </div>
 
           <ul className="sidebar-menu">
             {sidebarOptions.map((item) => (
@@ -160,10 +165,6 @@ const [user, setUser] = useState(null);
 
       {/* Main Content */}
       <main className="main-content">
-        <header className="topbar">
-          <h3>{selected}</h3>
-          <img src="https://via.placeholder.com/35" alt="Admin" className="admin-avatar" />
-        </header>
 
         <div className="content-body">{renderComponent()}</div>
       </main>

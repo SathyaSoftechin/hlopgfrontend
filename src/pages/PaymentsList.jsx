@@ -1,86 +1,67 @@
 // src/pages/PaymentsList.jsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import api from "../api";
 import "./PaymentsList.css";
 
 const PaymentsList = () => {
-  // Initial payments data
-  const [payments, setPayments] = useState([
-    {
-      id: 1,
-      name: "Thota Chaitanya",
-      date: "2025-10-10",
-      type: "3 Sharing",
-      amount: "9000",
-      status: "Paid",
-    },
-    {
-      id: 2,
-      name: "Vijay Kumar",
-      date: "2025-10-12",
-      type: "2 Sharing",
-      amount: "8500",
-      status: "Pending",
-    },
-    {
-      id: 3,
-      name: "Rohit Reddy",
-      date: "2025-10-15",
-      type: "Single Room",
-      amount: "12000",
-      status: "Paid",
-    },
-  ]);
+  const token = localStorage.getItem("hlopgToken");
 
-  // New Payment form state
-  const [newPayment, setNewPayment] = useState({
-    name: "",
-    date: "",
-    type: "",
-    amount: "",
-    status: "Pending",
-  });
+  const [payments, setPayments] = useState(null); // 🔑 null = not fetched
+  const [loading, setLoading] = useState(true);
 
-  // Handle input change
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setNewPayment((prev) => ({ ...prev, [name]: value }));
-  };
+  /* ================= FETCH PAYMENTS ================= */
+  useEffect(() => {
+    const fetchPayments = async () => {
+      try {
+        const res = await api.get("/payments/owner", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
-  // Add new payment
-  const handleAddPayment = () => {
-    if (
-      !newPayment.name ||
-      !newPayment.date ||
-      !newPayment.type ||
-      !newPayment.amount
-    ) {
-      alert("Please fill all fields before adding a payment!");
-      return;
-    }
-
-    const newEntry = {
-      ...newPayment,
-      id: payments.length + 1,
+        setPayments(res.data?.data || []);
+      } catch (err) {
+        console.warn("Payments API not ready yet");
+        setPayments(null); // 🔑 keep UI alive
+      } finally {
+        setLoading(false);
+      }
     };
-    setPayments([...payments, newEntry]);
-    setNewPayment({
-      name: "",
-      date: "",
-      type: "",
-      amount: "",
-      status: "Pending",
-    });
+
+    fetchPayments();
+  }, [token]);
+
+  /* ================= UPDATE PAYMENT STATUS ================= */
+  const togglePaymentStatus = async (paymentId, currentStatus) => {
+    try {
+      const newStatus = currentStatus === "paid" ? "pending" : "paid";
+
+      await api.put(
+        `/payments/${paymentId}/status`,
+        { status: newStatus },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      // 🔥 Instant UI update (optimistic update)
+      setPayments((prev) =>
+        prev.map((p) =>
+          p.payment_id === paymentId
+            ? { ...p, status: newStatus }
+            : p
+        )
+      );
+    } catch (err) {
+      console.error(err);
+      alert("Failed to update payment status. Please try again.");
+    }
   };
 
-  // Toggle payment status between Pending and Paid
-  const handleToggleStatus = (id) => {
-    const updatedPayments = payments.map((p) =>
-      p.id === id
-        ? { ...p, status: p.status === "Paid" ? "Pending" : "Paid" }
-        : p
-    );
-    setPayments(updatedPayments);
-  };
+  /* ================= TOTAL ================= */
+  const totalAmount =
+    payments?.reduce(
+      (sum, p) => sum + Number(p.amount || 0),
+      0
+    ) || 0;
 
   return (
     <div className="payments-container">
@@ -88,92 +69,80 @@ const PaymentsList = () => {
         <h2>💳 Payments List</h2>
       </div>
 
-      {/* ---------------- Add Payment Form ---------------- */}
-      <div className="add-payment-form">
-        <input
-          type="text"
-          name="name"
-          placeholder="Full Name"
-          value={newPayment.name}
-          onChange={handleChange}
-        />
-        <input
-          type="date"
-          name="date"
-          value={newPayment.date}
-          onChange={handleChange}
-        />
-        <select name="type" value={newPayment.type} onChange={handleChange}>
-          <option value="">Select Sharing Type</option>
-          <option value="Single Room">Single Room</option>
-          <option value="2 Sharing">2 Sharing</option>
-          <option value="3 Sharing">3 Sharing</option>
-          <option value="4 Sharing">4 Sharing</option>
-        </select>
-        <input
-          type="number"
-          name="amount"
-          placeholder="Amount (₹)"
-          value={newPayment.amount}
-          onChange={handleChange}
-        />
-        <button onClick={handleAddPayment}>+ Add Payment</button>
-      </div>
+      {/* Loading */}
+      {loading && <p>Loading payments…</p>}
 
-      {/* ---------------- Payments Table ---------------- */}
-      <table className="payments-table">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Joining Date</th>
-            <th>Sharing Type</th>
-            <th>Amount</th>
-            <th>Status</th>
-            <th>Change</th>
-          </tr>
-        </thead>
-        <tbody>
-          {payments.map((payment) => (
-            <tr key={payment.id}>
-              <td>{payment.name}</td>
-              <td>{payment.date}</td>
-              <td>{payment.type}</td>
-              <td>₹ {payment.amount}</td>
-              <td>
-                <span
-                  className={`status-badge ${
-                    payment.status.toLowerCase() === "paid"
-                      ? "paid"
-                      : "pending"
-                  }`}
-                >
-                  {payment.status}
-                </span>
-              </td>
-              <td>
-                <button
-                  className={`status-toggle-btn ${
-                    payment.status === "Paid" ? "btn-paid" : "btn-pending"
-                  }`}
-                  onClick={() => handleToggleStatus(payment.id)}
-                >
-                  {payment.status === "Paid" ? "Mark Pending" : "Mark Paid"}
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {/* API Not Ready */}
+      {!loading && payments === null && (
+        <p>Data needs to be fetched</p>
+      )}
 
-      {/* ---------------- Total Footer ---------------- */}
-      <div className="flex justify-end mt-6">
-        <div className="bg-purple-600 text-white px-6 py-3 rounded-lg font-medium text-lg inline-block">
-          Total: ₹{" "}
-          {payments
-            .reduce((sum, p) => sum + parseInt(p.amount || 0), 0)
-            .toLocaleString()}
-        </div>
-      </div>
+      {/* No Payments */}
+      {!loading && payments?.length === 0 && (
+        <p>No payments found</p>
+      )}
+
+      {/* Payments Table */}
+      {!loading && payments?.length > 0 && (
+        <>
+          <table className="payments-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Date</th>
+                <th>Sharing</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Change</th>
+              </tr>
+            </thead>
+            <tbody>
+              {payments.map((p) => (
+                <tr key={p.payment_id}>
+                  <td>{p.name || "-"}</td>
+                  <td>
+                    {p.payment_date
+                      ? new Date(p.payment_date).toLocaleDateString()
+                      : "-"}
+                  </td>
+                  <td>{p.sharing_type || "-"}</td>
+                  <td>₹ {Number(p.amount || 0).toLocaleString()}</td>
+                  <td>
+                    <span
+                      className={`status-badge ${
+                        p.status === "paid" ? "paid" : "pending"
+                      }`}
+                    >
+                      {p.status}
+                    </span>
+                  </td>
+                  <td>
+                    <button
+                      className={`status-toggle-btn ${
+                        p.status === "paid"
+                          ? "btn-paid"
+                          : "btn-pending"
+                      }`}
+                      onClick={() =>
+                        togglePaymentStatus(p.payment_id, p.status)
+                      }
+                    >
+                      {p.status === "paid"
+                        ? "Mark Pending"
+                        : "Mark Paid"}
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          {/* TOTAL */}
+          <div className="payments-total">
+            Total: ₹ {totalAmount.toLocaleString()}
+          </div>
+        </>
+      )}
     </div>
   );
 };

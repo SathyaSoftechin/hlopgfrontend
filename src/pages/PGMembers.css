@@ -1,143 +1,143 @@
-.pgmembers-container {
-  background-color: #f8f9fb;
-  min-height: 100vh;
-  padding: 125px 35px;
+/* ================= ROOT PAGE ================= */
+.pg-members-page {
+  background: #f4f6fb;
+  padding: 24px;
+  padding-top: 100px;
   font-family: "Poppins", sans-serif;
+  min-height: 100%;
 }
 
-/* ===== Header ===== */
-.pgmembers-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 25px;
+/* ================= PAGE TITLE ================= */
+.pg-members-page h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 18px;
+  color: #1f2937;
 }
 
-.pgmembers-legend {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  font-size: 14px;
-  color: #333;
-}
-
-.legend {
-  display: inline-block;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  margin-right: 6px;
-}
-
-.legend.stay {
-  background-color: #a7f3d0;
-}
-
-.legend.leaving {
-  background-color: #fef3c7;
-}
-
-.legend.left {
-  background-color: #fecaca;
-}
-
-/* ===== Filter ===== */
-.pgmembers-filter {
-  display: flex;
-  align-items: center;
-  background: #fff;
-  padding: 6px 12px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  gap: 6px;
-}
-
-.filter-icon {
-  color: #6c63ff;
-  font-size: 16px;
-}
-
-.filter-select {
-  border: none;
-  outline: none;
-  background: transparent;
-  font-size: 14px;
-  color: #555;
-  cursor: pointer;
-}
-
-/* ===== Table ===== */
-.pgmembers-table {
-  background: #fff;
+/* ================= PG SELECT ================= */
+.pg-members-page select {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
   border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+  padding: 10px 14px;
+  font-size: 14px;
+  color: #374151;
+  outline: none;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+  margin-bottom: 20px;
+  transition: border 0.2s ease, box-shadow 0.2s ease;
 }
 
-table {
+.pg-members-page select:hover {
+  border-color: #6366f1;
+}
+
+.pg-members-page select:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15);
+}
+
+/* ================= TABLE CARD ================= */
+.pg-members-page table {
   width: 100%;
   border-collapse: collapse;
+  background: #ffffff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
   font-size: 14px;
 }
 
-th {
-  background: #f5f4ff;
-  color: #444;
+/* ================= TABLE HEADER ================= */
+.pg-members-page thead {
+  background: linear-gradient(135deg, #6366f1, #7c7cfb);
+}
+
+.pg-members-page th {
+  padding: 14px 16px;
+  color: #ffffff;
   font-weight: 600;
-  padding: 12px;
   text-align: left;
-  border-bottom: 2px solid #eee;
+  white-space: nowrap;
 }
 
-td {
-  padding: 12px;
-  border-bottom: 1px solid #f0f0f0;
-  color: #333;
+/* ================= TABLE BODY ================= */
+.pg-members-page td {
+  padding: 14px 16px;
+  color: #374151;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
 }
 
-/* ===== Row Colors ===== */
-.row-stay {
-  background-color: #f0fdf4;
+.pg-members-page tbody tr:hover {
+  background: #f9fafb;
 }
 
-.row-leaving {
-  background-color: #fffbeb;
-}
-
-.row-left {
-  background-color: #fef2f2;
-}
-
-/* ===== Total Box ===== */
-.pgmembers-total {
-  margin-top: 15px;
-  text-align: right;
+/* ================= STATUS PILLS ================= */
+.pg-members-page td:last-child {
   font-weight: 600;
-  color: #fff;
-  background: #6c63ff;
-  display: inline-block;
-  padding: 6px 15px;
-  border-radius: 6px;
-  font-size: 14px;
-  /* float: right; */
+  text-transform: capitalize;
 }
 
-/* ===== Responsive ===== */
+.pg-members-page td:last-child {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+
+/* Pending */
+.pg-members-page td[style*="red"] {
+  background: #fee2e2;
+  color: #b91c1c !important;
+}
+
+/* Active / Paid */
+.pg-members-page td[style*="green"] {
+  background: #dcfce7;
+  color: #15803d !important;
+}
+
+/* ================= EMPTY / LOADING ================= */
+.pg-members-page p {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  color: #6b7280;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+}
+
+.pending {
+  color: #b91c1c;
+}
+
+/* ================= RESPONSIVE ================= */
 @media (max-width: 768px) {
-  .pgmembers-header {
-    flex-direction: column;
-    gap: 10px;
-    align-items: flex-start;
+  .pg-members-page {
+    padding: 16px;
   }
 
-  .pgmembers-filter {
+  .pg-members-page h3 {
+    font-size: 18px;
+  }
+
+  .pg-members-page select {
     width: 100%;
-    justify-content: space-between;
   }
 
-  table th,
-  table td {
+  /* Horizontal scroll for table */
+  .pg-members-page table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .pg-members-page th,
+  .pg-members-page td {
     font-size: 13px;
-    padding: 10px;
+    padding: 12px;
   }
 }

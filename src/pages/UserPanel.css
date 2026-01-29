@@ -99,6 +99,7 @@
 }
 
 .sidebar .logout {
+  margin-bottom: 445px;
   margin-top: auto;
   border-color: #f87171;
   color: #f87171;
@@ -560,4 +561,8 @@ input.invalid {
   top: 10px;
   right: 10px;
   cursor: pointer;
+}
+
+.logout {
+
 }

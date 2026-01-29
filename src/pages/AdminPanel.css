@@ -1,3 +1,45 @@
+/* ================= LOGO WRAPPER ================= */
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+}
+
+/* ================= LOGO IMAGE ================= */
+.logo img {
+  margin-top: 50px;
+  margin-left: 100px;
+  padding-bottom: 40px;
+  width: 90px;              /* desktop size */
+  /* max-width: 100%; */
+  height: auto;
+  object-fit: contain;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  cursor: pointer;
+}
+
+/* Hover interaction (subtle & premium) */
+.logo img:hover {
+  transform: scale(1.04);
+  opacity: 0.95;
+}
+
+/* ================= TABLET ================= */
+@media (max-width: 1024px) {
+  .logo img {
+    width: 100px;
+  }
+}
+
+/* ================= MOBILE ================= */
+@media (max-width: 600px) {
+  .logo img {
+    width: 82px;
+  }
+}
+
 /* ================== BASE CONTAINER ================== */
 .admin-container {
   display: flex;

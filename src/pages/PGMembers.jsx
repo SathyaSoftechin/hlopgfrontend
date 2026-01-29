@@ -7,30 +7,24 @@ const PGMembers = () => {
 
   const [pgs, setPgs] = useState([]);
   const [selectedPg, setSelectedPg] = useState(null);
-
   const [members, setMembers] = useState([]);
   const [loadingPGs, setLoadingPGs] = useState(true);
   const [loadingMembers, setLoadingMembers] = useState(false);
+  const [updatingId, setUpdatingId] = useState(null);
   const [error, setError] = useState("");
 
   /* ---------------- Fetch Owner PGs ---------------- */
   useEffect(() => {
     const fetchPGs = async () => {
       try {
-        setLoadingPGs(true);
-
         const res = await api.get("/owner/pgs", {
           headers: { Authorization: `Bearer ${token}` },
         });
 
         const list = res.data?.data || [];
         setPgs(list);
-
-        if (list.length > 0) {
-          setSelectedPg(list[0].hostel_id); // ✅ NUMBER
-        }
-      } catch (err) {
-        console.error(err);
+        if (list.length) setSelectedPg(list[0].hostel_id);
+      } catch {
         setError("Failed to load PGs");
       } finally {
         setLoadingPGs(false);
@@ -47,15 +41,11 @@ const PGMembers = () => {
     const fetchMembers = async () => {
       try {
         setLoadingMembers(true);
-        setError("");
-
         const res = await api.get(`/booking/pg/${selectedPg}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-
         setMembers(res.data?.members || []);
-      } catch (err) {
-        console.error(err);
+      } catch {
         setError("Failed to load members");
       } finally {
         setLoadingMembers(false);
@@ -65,7 +55,33 @@ const PGMembers = () => {
     fetchMembers();
   }, [selectedPg, token]);
 
-  /* ---------------- UI ---------------- */
+  /* ---------------- Update Payment Status (FIXED) ---------------- */
+  const updatePaymentStatus = async (bookingId, newStatus) => {
+    try {
+      setUpdatingId(bookingId);
+
+      // Optimistic UI
+      setMembers((prev) =>
+        prev.map((m) =>
+          m.booking_id === bookingId
+            ? { ...m, payment_status: newStatus }
+            : m
+        )
+      );
+
+      // ✅ MATCH BACKEND (PUT + payment_status)
+      await api.put(
+        `/booking/${bookingId}`,
+        { payment_status: newStatus },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+    } catch (err) {
+      console.error("Payment update failed:", err?.response?.data || err);
+    } finally {
+      setUpdatingId(null);
+    }
+  };
+
   if (loadingPGs) return <p>Loading PGs…</p>;
   if (error) return <p style={{ color: "red" }}>{error}</p>;
 
@@ -73,7 +89,6 @@ const PGMembers = () => {
     <div className="pg-members-page">
       <h3>PG Members</h3>
 
-      {/* PG Selector */}
       <select
         value={selectedPg ?? ""}
         onChange={(e) => setSelectedPg(Number(e.target.value))}
@@ -90,7 +105,7 @@ const PGMembers = () => {
       ) : members.length === 0 ? (
         <p>No members found</p>
       ) : (
-        <table width="100%">
+        <table>
           <thead>
             <tr>
               <th>Name</th>
@@ -98,7 +113,7 @@ const PGMembers = () => {
               <th>Sharing</th>
               <th>Joining Date</th>
               <th>Rent</th>
-              <th>Status</th>
+              <th>Payment Status</th>
             </tr>
           </thead>
           <tbody>
@@ -113,14 +128,17 @@ const PGMembers = () => {
                     : "-"}
                 </td>
                 <td>₹{m.rentAmount}</td>
-                <td
-                  style={{
-                    color:
-                      m.status === "pending_payment" ? "red" : "green",
-                    fontWeight: 600,
-                  }}
-                >
-                  {m.status}
+                <td>
+                  <select
+                    disabled={updatingId === m.booking_id}
+                    value={m.payment_status}
+                    onChange={(e) =>
+                      updatePaymentStatus(m.booking_id, e.target.value)
+                    }
+                  >
+                    <option value="pending">Payment Pending</option>
+                    <option value="success">Payment Successful</option>
+                  </select>
                 </td>
               </tr>
             ))}

@@ -1,92 +1,105 @@
-/* src/pages/Reviews.css */
-
+/* ================= REVIEWS CONTAINER ================= */
 .reviews-container {
-  background: #fff;
-  padding: 30px;
-  border-radius: 14px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  background: #ffffff;
+  padding: 28px;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
   margin-top: 20px;
-  animation: fadeIn 0.3s ease-in-out;
+  animation: fadeIn 0.35s ease-in-out;
 }
 
+/* ================= TITLE ================= */
 .reviews-title {
   font-size: 24px;
   font-weight: 600;
-  color: #222;
+  color: #1f2937;
   margin-bottom: 24px;
-  border-left: 4px solid #7b61ff;
-  padding-left: 12px;
+  padding-left: 14px;
+  border-left: 4px solid #7556ff;
 }
 
-/* Grid Layout */
+/* ================= GRID ================= */
 .reviews-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 22px;
 }
 
-/* Individual Review Card */
+/* ================= REVIEW CARD ================= */
 .review-card {
-  background: #fff;
-  border: 1px solid #eee;
-  border-radius: 12px;
+  background: #ffffff;
+  border-radius: 14px;
   padding: 20px;
+  border: 1px solid #eef0f6;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.04);
   transition: all 0.3s ease;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .review-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+  transform: translateY(-6px);
+  box-shadow: 0 10px 22px rgba(117, 86, 255, 0.15);
+  border-color: #dcd7ff;
 }
 
-/* Header Section */
+/* ================= HEADER ================= */
 .review-header {
   display: flex;
   align-items: center;
-  margin-bottom: 14px;
+  gap: 12px;
 }
 
+/* Avatar */
 .avatar {
-  width: 48px;
-  height: 48px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   object-fit: cover;
-  margin-right: 12px;
+  border: 2px solid #ecebff;
 }
 
+/* Reviewer Info */
 .reviewer-info h4 {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
-  margin-bottom: 2px;
-  color: #111;
+  color: #111827;
+  margin: 0;
 }
 
 .reviewer-info p {
   font-size: 13px;
-  color: #777;
-  margin: 0;
+  color: #6b7280;
+  margin: 2px 0 0;
 }
 
-/* Review Text */
+/* ================= REVIEW TEXT ================= */
 .review-text {
   font-size: 14px;
-  color: #333;
-  margin-bottom: 12px;
   line-height: 1.6;
+  color: #374151;
+  margin-top: 6px;
 }
 
-/* Star Ratings */
+/* ================= STARS ================= */
 .stars {
   display: flex;
   gap: 4px;
+  margin-top: auto;
 }
 
-/* Animation */
+/* ================= EMPTY / LOADING STATES ================= */
+.reviews-container p {
+  color: #6b7280;
+  font-size: 14px;
+}
+
+/* ================= ANIMATION ================= */
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(6px);
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
@@ -94,17 +107,36 @@
   }
 }
 
-/* Responsive */
+/* ================= RESPONSIVE ================= */
 @media (max-width: 768px) {
   .reviews-container {
     padding: 20px;
+  }
+
+  .reviews-title {
+    font-size: 20px;
   }
 
   .review-card {
     padding: 16px;
   }
 
+  .avatar {
+    width: 44px;
+    height: 44px;
+  }
+
+  .review-text {
+    font-size: 13.5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .reviews-grid {
+    gap: 16px;
+  }
+
   .reviews-title {
-    font-size: 20px;
+    font-size: 18px;
   }
 }
