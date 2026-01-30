@@ -36,6 +36,9 @@ const UserPanel = ({ onSave, onLogout }) => {
     symbol: false,
   });
   const [confirmValid, setConfirmValid] = useState(true);
+  const [pgUpdates, setPgUpdates] = useState([]);
+const [loadingUpdates, setLoadingUpdates] = useState(false);
+
 
   const navigate = useNavigate();
 
@@ -224,6 +227,33 @@ const UserPanel = ({ onSave, onLogout }) => {
       return () => clearTimeout(timer);
     }
   }, [animateGreeting]);
+
+  useEffect(() => {
+  const fetchPgUpdates = async () => {
+    const token = localStorage.getItem("hlopgToken");
+    if (!token) return;
+
+    try {
+      setLoadingUpdates(true);
+
+      const res = await api.get("/auth/pg-updates", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (res.status === 200) {
+        setPgUpdates(res.data?.data || []);
+      }
+    } catch (err) {
+      console.error("Failed to fetch PG updates:", err);
+    } finally {
+      setLoadingUpdates(false);
+    }
+  };
+
+  fetchPgUpdates();
+}, []);
 
   const openLogoutModal = () => {
     setShowLogoutModal(true);
@@ -530,6 +560,30 @@ const UserPanel = ({ onSave, onLogout }) => {
           </>
         );
 
+        case "notifications":
+  return (
+    <>
+      <h3>PG UPDATES / NOTIFICATIONS</h3>
+
+      {loadingUpdates ? (
+        <p>Loading updates...</p>
+      ) : pgUpdates.length === 0 ? (
+        <p>No updates yet.</p>
+      ) : (
+        <div className="notifications-list">
+          {pgUpdates.map((u) => (
+            <div className="notification-card" key={u.id}>
+<h4>🏠 {u.hostel?.hostel_name}</h4>
+              <p>{u.message}</p>
+              <small>
+                {new Date(u.created_at).toLocaleString()}
+              </small>
+            </div>
+          ))}
+        </div>
+      )}
+    </>
+  );
       case "terms":
         return (
           <>
@@ -573,6 +627,8 @@ const UserPanel = ({ onSave, onLogout }) => {
             { id: "basic-info", label: "Basic Information" },
             { id: "booked-pg", label: "Booked PG’s List" },
             { id: "liked-pg", label: "Liked PG’s List" },
+            { id: "notifications", label: "Notifications" },
+
             { id: "payment-history", label: "Payment History" },
             { id: "change-password", label: "Change Password" },
             { id: "terms", label: "Terms and Conditions" },

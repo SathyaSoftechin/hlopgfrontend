@@ -35,6 +35,9 @@ const [loadingMembersIn, setLoadingMembersIn] = useState(true);
   const [reviews, setReviews] = useState(null);
 
   const [loadingPGs, setLoadingPGs] = useState(true);
+  const [selectedHostelId, setSelectedHostelId] = useState("");
+const [sendingUpdate, setSendingUpdate] = useState(false);
+
 
   /* ================= MY PGs (WORKING & UNTOUCHED) ================= */
   useEffect(() => {
@@ -117,6 +120,43 @@ useEffect(() => {
   fetchMembersOut();
 }, [token]);
 
+
+
+const handleSendPgUpdate = async () => {
+  if (!selectedHostelId) {
+    alert("Please select a PG");
+    return;
+  }
+
+  if (!pgUpdate || !pgUpdate.trim()) {
+    alert("Please enter update message");
+    return;
+  }
+
+  try {
+    setSendingUpdate(true);
+
+    await api.post(
+      "/owner/pg-update",
+      {
+        hostel_id: selectedHostelId,
+        message: pgUpdate,
+      },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+
+    alert("PG update sent to booked users ✅");
+    setPgUpdate("");
+  } catch (err) {
+    console.error("PG update failed:", err);
+    alert("Failed to send update");
+  } finally {
+    setSendingUpdate(false);
+  }
+};
+
   return (
     <div className="dashboard-container">
       {/* Greeting */}
@@ -156,11 +196,37 @@ useEffect(() => {
 
       {/* ================= PG UPDATES ================= */}
       <section className="pg-updates">
-        <h4 className="section-title">PG Daily Updates</h4>
-        <div className="update-box">
-          {pgUpdate ? <p>{pgUpdate}</p> : <p>Data needs to be fetched</p>}
-        </div>
-      </section>
+  <h4 className="section-title">PG Daily Updates</h4>
+
+  {/* Select PG */}
+  <select
+    value={selectedHostelId}
+    onChange={(e) => setSelectedHostelId(e.target.value)}
+  >
+    <option value="">Select PG</option>
+    {pgs.map((pg) => (
+      <option key={pg.hostel_id} value={pg.hostel_id}>
+        {pg.hostel_name}
+      </option>
+    ))}
+  </select>
+
+  {/* Update message */}
+  <textarea
+    placeholder="Enter today's PG update..."
+    value={pgUpdate || ""}
+    onChange={(e) => setPgUpdate(e.target.value)}
+    rows={4}
+  />
+
+  {/* Send button */}
+  <button
+    onClick={handleSendPgUpdate}
+    disabled={sendingUpdate}
+  >
+    {sendingUpdate ? "Sending..." : "Send Update"}
+  </button>
+</section>
 
       {/* ================= MEMBERS ================= */}
       <section className="members-lists">
