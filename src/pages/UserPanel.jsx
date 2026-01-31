@@ -38,6 +38,7 @@ const UserPanel = ({ onSave, onLogout }) => {
   const [confirmValid, setConfirmValid] = useState(true);
   const [pgUpdates, setPgUpdates] = useState([]);
 const [loadingUpdates, setLoadingUpdates] = useState(false);
+const [openActionsId, setOpenActionsId] = useState(null);
 
 
   const navigate = useNavigate();
@@ -121,6 +122,44 @@ const [loadingUpdates, setLoadingUpdates] = useState(false);
 
     fetchBookedPGs();
   }, []);
+
+
+  const handleCancelBooking = async (bookingId) => {
+  const token = localStorage.getItem("hlopgToken");
+  try {
+    const res = await api.put(`/booking/cancel/${bookingId}`, {}, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    alert(res.data.message || "Booking canceled successfully");
+    setBookedPGs((prev) => prev.filter((b) => b.bookingId !== bookingId));
+  } catch (err) {
+    console.error(err);
+    alert("Failed to cancel booking");
+  }
+};
+
+const handleRaiseComplaint = (bookingId, hostelName) => {
+  const complaint = prompt(`Enter your complaint for ${hostelName}`);
+  if (!complaint) return;
+  const token = localStorage.getItem("hlopgToken");
+  api.post(`/booking/complaint/${bookingId}`, { complaint }, {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+  .then(res => alert(res.data.message || "Complaint sent"))
+  .catch(() => alert("Failed to raise complaint"));
+};
+
+const handleWriteReview = (bookingId, hostelName) => {
+  const review = prompt(`Write your review for ${hostelName}`);
+  if (!review) return;
+  const rating = prompt("Give a rating (1-5)");
+  const token = localStorage.getItem("hlopgToken");
+  api.post(`/booking/review/${bookingId}`, { review, rating }, {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+  .then(res => alert(res.data.message || "Review submitted"))
+  .catch(() => alert("Failed to submit review"));
+};
 
   const handleProfileChange = (e) => {
     const file = e.target.files[0];
@@ -397,39 +436,96 @@ const [loadingUpdates, setLoadingUpdates] = useState(false);
           </>
         );
 
-      case "booked-pg":
-        return (
-          <>
-            <h3>BOOKED PG’S LIST</h3>
+      // case "booked-pg":
+      //   return (
+      //     <>
+      //       <h3>BOOKED PG’S LIST</h3>
 
-            {loadingBookings ? (
-              <p>Loading bookings...</p>
-            ) : bookedPGs.length ? (
-              <div className="pg-list">
-                {bookedPGs.map((booking) => (
-                  <div className="pg-card" key={booking.bookingId}>
-                    <h4>🏠 {booking.hostelName}</h4>
+      //       {loadingBookings ? (
+      //         <p>Loading bookings...</p>
+      //       ) : bookedPGs.length ? (
+      //         <div className="pg-list">
+      //           {bookedPGs.map((booking) => (
+      //             <div className="pg-card" key={booking.bookingId}>
+      //               <h4>🏠 {booking.hostelName}</h4>
 
-                    <p>
-                      📍 {booking.area}, {booking.city}
-                    </p>
-                    <p>🛏 Sharing: {booking.sharing}</p>
-                    <p>📅 Joining Date: {booking.date}</p>
-                    <p>💰 Rent: ₹{booking.rentAmount}</p>
-                    <p>🔐 Deposit: ₹{booking.deposit}</p>
-                    <p>💳 Total: ₹{booking.totalAmount}</p>
+      //               <p>
+      //                 📍 {booking.area}, {booking.city}
+      //               </p>
+      //               <p>🛏 Sharing: {booking.sharing}</p>
+      //               <p>📅 Joining Date: {booking.date}</p>
+      //               <p>💰 Rent: ₹{booking.rentAmount}</p>
+      //               <p>🔐 Deposit: ₹{booking.deposit}</p>
+      //               <p>💳 Total: ₹{booking.totalAmount}</p>
 
-                    <p className={`status ${booking.status}`}>
-                      Status: <strong>{booking.status}</strong>
-                    </p>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p>No booked PGs.</p>
-            )}
-          </>
-        );
+      //               <p className={`status ${booking.status}`}>
+      //                 Status: <strong>{booking.status}</strong>
+      //               </p>
+      //             </div>
+      //           ))}
+      //         </div>
+      //       ) : (
+      //         <p>No booked PGs.</p>
+      //       )}
+      //     </>
+      //   );
+
+
+     case "booked-pg":
+  return (
+    <>
+      <h3>BOOKED PG’S LIST</h3>
+
+      {loadingBookings ? (
+        <p>Loading bookings...</p>
+      ) : bookedPGs.length ? (
+        <div className="pg-list">
+          {bookedPGs.map((booking) => (
+            <div className="pg-card" key={booking.bookingId}>
+              <h4>🏠 {booking.hostelName}</h4>
+              <p>📍 {booking.area}, {booking.city}</p>
+              <p>🛏 Sharing: {booking.sharing}</p>
+              <p>📅 Joining Date: {booking.date}</p>
+              <p>💰 Rent: ₹{booking.rentAmount}</p>
+              <p>🔐 Deposit: ₹{booking.deposit}</p>
+              <p>💳 Total: ₹{booking.totalAmount}</p>
+
+              <p className={`status ${booking.status}`}>
+                Status: <strong>{booking.status}</strong>
+              </p>
+
+              <button
+                className="action-btn"
+                onClick={() =>
+                  setOpenActionsId((prev) =>
+                    prev === booking.bookingId ? null : booking.bookingId
+                  )
+                }
+              >
+                {openActionsId === booking.bookingId ? "Hide Actions" : "Actions"}
+              </button>
+
+              {openActionsId === booking.bookingId && (
+                <div className="pg-actions">
+                  <button onClick={() => handleCancelBooking(booking.bookingId)}>
+                    Cancel Booking
+                  </button>
+                  <button onClick={() => handleRaiseComplaint(booking.bookingId, booking.hostelName)}>
+                    Raise Complaint
+                  </button>
+                  <button onClick={() => handleWriteReview(booking.bookingId, booking.hostelName)}>
+                    Write Review & Rating
+                  </button>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p>No booked PGs.</p>
+      )}
+    </>
+  );
 
       case "liked-pg":
         return (
